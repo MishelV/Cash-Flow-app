@@ -2,6 +2,12 @@ import 'package:hive/hive.dart';
 
 part 'record.g.dart';
 
+enum RecordType {
+  all,
+  expense,
+  income,
+}
+
 @HiveType(typeId: 0)
 class Record {
   @HiveField(0)

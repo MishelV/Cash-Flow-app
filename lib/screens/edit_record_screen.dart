@@ -103,7 +103,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
         ],
       ),
     );
-    // Navigator.of(context).pop();
   }
 
   @override
@@ -163,10 +162,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 ),
                 Row(
                   children: [
-                    // const Text("Record Type: "),
-                    // const SizedBox(
-                    //   width: 50,
-                    // ),
                     Expanded(
                       child: DropdownButtonFormField<String>(
                         isDense: true,

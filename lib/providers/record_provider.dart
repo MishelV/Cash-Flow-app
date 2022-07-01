@@ -83,17 +83,27 @@ class RecordProvider with ChangeNotifier {
     return records;
   }
 
+  bool recordTypeMatch(Record r, RecordType t) {
+    return !(t == RecordType.expense && r.value > 0 ||
+        t == RecordType.income && r.value < 0);
+  }
+
   List<Record> getRecordsFromTimeFrameByKeyword(
-      String keyword, DateTime startDate, DateTime endDate) {
+      String keyword, DateTime startDate, DateTime endDate, RecordType type) {
     List<Record> records = getRecordsByTimeFrame(startDate, endDate);
-    if (keyword.isEmpty) return records;
+    if (keyword.isEmpty && type == RecordType.all) return records;
 
     List<Record> matchingRecords = [];
     for (Record r in records) {
-      if (r.name.contains(keyword) || r.description.contains(keyword)) {
+      if ((r.name.contains(keyword) ||
+              r.description.contains(keyword) ||
+              keyword.isEmpty) &&
+          recordTypeMatch(r, type)) {
         matchingRecords.add(r);
       }
     }
+    print("***********pop");
+    print("records size is ${matchingRecords.length}");
     return matchingRecords;
   }
 

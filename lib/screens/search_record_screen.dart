@@ -28,17 +28,22 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   DateTime _startDate = DateTime.now();
   DateTime _endDate = DateTime(DateTime.now().year + 1);
   String _keyword = "";
+  RecordType _recordType = RecordType.all;
   var _isInit = true;
 
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final yearMonth =
-          ModalRoute.of(context)?.settings.arguments as List<int>?;
-      if (yearMonth != null) {
+      final yearMonthType =
+          ModalRoute.of(context)?.settings.arguments as List<Object>?;
+      if (yearMonthType != null) {
         setState(() {
-          _startDate = DateTime(yearMonth[0], yearMonth[1]);
+          _startDate =
+              DateTime(yearMonthType[0] as int, yearMonthType[1] as int);
           _endDate = _startDate.add(const Duration(days: 30));
+          if (yearMonthType.length > 2) {
+            _recordType = yearMonthType[2] as RecordType;
+          }
         });
       }
     }
@@ -54,14 +59,10 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       FocusManager.instance.primaryFocus!.unfocus();
     }
 
-    // final isValid = _formKey.currentState?.validate();
-    // if (isValid == null || !isValid) {
-    //   return;
-    // }
-    // _formKey.currentState!.save();
     setState(() {
       _records = Provider.of<RecordProvider>(context, listen: false)
-          .getRecordsFromTimeFrameByKeyword(_keyword, _startDate, _endDate);
+          .getRecordsFromTimeFrameByKeyword(
+              _keyword, _startDate, _endDate, _recordType);
       _records.sort(
         (a, b) => a.startDate.compareTo(b.startDate),
       );
@@ -109,102 +110,157 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                     ),
                   ],
                 ),
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.all(5),
-                height: 90,
-                child: Row(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(5),
+                height: 135,
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        initialValue: "",
-                        decoration: const InputDecoration(
-                          labelText: "Keyword (Optional)",
-                          border: UnderlineInputBorder(),
-                          enabledBorder: InputBorder.none,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        const SizedBox(
+                          width: 10,
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            _keyword = value;
-                          });
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    SizedBox(
-                      width: 80,
-                      child: DateTimePicker(
-                        type: DateTimePickerType.date,
-                        initialValue: _startDate.toString(),
-                        firstDate: DateTime(DateTime.now().year - 10),
-                        lastDate: _endDate,
-                        dateMask: "dd/MM/yyyy",
-                        dateLabelText: 'Start Date',
-                        onSaved: (val) {
-                          if (val != null) {
-                            setState(() {
-                              _startDate = DateTimeUtil.getDateTime(val);
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    SizedBox(
-                      width: 80,
-                      child: DateTimePicker(
-                        type: DateTimePickerType.date,
-                        initialValue: _endDate.toString(),
-                        firstDate: _startDate,
-                        lastDate: DateTime(DateTime.now().year + 10),
-                        dateMask: "dd/MM/yyyy",
-                        dateLabelText: 'End Date',
-                        onSaved: (val) {
-                          if (val != null) {
-                            setState(() {
-                              _endDate = DateTimeUtil.getDateTime(val);
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: 8,
-                    ),
-                    ButtonWrapper(
-                      width: 50,
-                      height: 50,
-                      child: TextButton(
-                        onPressed: setRecords,
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
+                        SizedBox(
+                          height: 30,
+                          width: 170,
+                          child: TextFormField(
+                            initialValue: "",
+                            decoration: const InputDecoration(
+                              labelText: "Keyword (Optional)",
+                              border: UnderlineInputBorder(),
+                              enabledBorder: InputBorder.none,
+                            ),
+                            onChanged: (value) {
+                              setState(() {
+                                _keyword = value;
+                              });
+                            },
                           ),
                         ),
-                        child: Text(
-                          "Go!",
-                          style: Theme.of(context).textTheme.bodyText1,
+                        const SizedBox(
+                          width: 10,
                         ),
-                      ),
+                        SizedBox(
+                          height: 45,
+                          width: 100,
+                          child: DropdownButtonFormField<String>(
+                            isDense: true,
+                            validator: (value) {
+                              if (value == null || value == "") {
+                                return "Please pick the record type!";
+                              }
+                              return null;
+                            },
+                            hint: const Text("Type"),
+                            items:
+                                ["All", "Income", "Expense"].map((recordType) {
+                              return DropdownMenuItem<String>(
+                                child: SizedBox(
+                                  height: 20,
+                                  child: Text(recordType),
+                                ),
+                                value: recordType,
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) {
+                                setState(
+                                  () {
+                                    if (val == "Expense") {
+                                      _recordType = RecordType.expense;
+                                    } else if (val == "Income") {
+                                      _recordType = RecordType.income;
+                                    } else {
+                                      _recordType = RecordType.all;
+                                    }
+                                  },
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 80,
+                          child: DateTimePicker(
+                            type: DateTimePickerType.date,
+                            initialValue: _startDate.toString(),
+                            firstDate: DateTime(DateTime.now().year - 10),
+                            lastDate: _endDate,
+                            dateMask: "dd/MM/yyyy",
+                            dateLabelText: 'Start Date',
+                            onSaved: (val) {
+                              if (val != null) {
+                                setState(() {
+                                  _startDate = DateTimeUtil.getDateTime(val);
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: DateTimePicker(
+                            type: DateTimePickerType.date,
+                            initialValue: _endDate.toString(),
+                            firstDate: _startDate,
+                            lastDate: DateTime(DateTime.now().year + 10),
+                            dateMask: "dd/MM/yyyy",
+                            dateLabelText: 'End Date',
+                            onSaved: (val) {
+                              if (val != null) {
+                                setState(() {
+                                  _endDate = DateTimeUtil.getDateTime(val);
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        ButtonWrapper(
+                          width: 50,
+                          height: 50,
+                          child: TextButton(
+                            onPressed: setRecords,
+                            style: TextButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                              ),
+                            ),
+                            child: Text(
+                              "Go!",
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ),
-            SizedBox(
-              width: 28,
+            const SizedBox(
+              width: 26,
             ),
             if (_records.isNotEmpty)
               SizedBox(
                 width: 300,
-                height: 400,
+                height: 380,
                 child: ListView.builder(
                   itemBuilder: (ctx, index) {
                     final record = _records.elementAt(index);
@@ -223,7 +279,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 150,
                   ),
                   Text(

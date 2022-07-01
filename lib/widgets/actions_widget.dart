@@ -1,3 +1,4 @@
+import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class ActionsWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: const [
+          children: [
             SizedBox(
               width: 10,
             ),
@@ -30,12 +31,18 @@ class ActionsWidget extends StatelessWidget {
             ActionButton(
               icon: Icon(Icons.payment),
               buttonName: "Upcoming Expenses",
-              route: "",
+              route: SearchRecordScreen.routeName,
+              arguments: [
+                DateTime.now().year,
+                DateTime.now().month,
+                RecordType.expense
+              ],
             ),
             ActionButton(
               icon: Icon(Icons.summarize_outlined),
               buttonName: "Monthly Summary",
-              route: "",
+              route: SearchRecordScreen.routeName,
+              arguments: [DateTime.now().year, DateTime.now().month],
             ),
             SizedBox(
               width: 10,
@@ -51,9 +58,9 @@ class ActionButton extends StatelessWidget {
   final Icon icon;
   final String buttonName;
   final String route;
-  final Object? arguments;
+  Object? arguments;
 
-  const ActionButton({
+  ActionButton({
     required this.icon,
     required this.buttonName,
     required this.route,
