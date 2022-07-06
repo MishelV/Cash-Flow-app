@@ -1,6 +1,5 @@
 import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/utils/date_time_util.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RecordCard extends StatefulWidget {
@@ -32,13 +31,14 @@ class _RecordCardState extends State<RecordCard> {
         : Theme.of(context).textTheme.bodyText2;
   }
 
+  @override
   Widget build(BuildContext context) {
     Color c = widget.record.value > 0
         ? Theme.of(context).colorScheme.surface
         : Theme.of(context).colorScheme.inversePrimary;
     return SizedBox(
       child: Card(
-        margin: EdgeInsets.all(7),
+        margin: const EdgeInsets.all(7),
         elevation: 3,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50),

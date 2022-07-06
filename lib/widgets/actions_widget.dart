@@ -15,21 +15,21 @@ class ActionsWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             ActionButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               buttonName: "Add Record",
               route: EditRecordScreen.routeName,
             ),
             ActionButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               buttonName: "Lookup Record",
               route: SearchRecordScreen.routeName,
             ),
             ActionButton(
-              icon: Icon(Icons.payment),
+              icon: const Icon(Icons.payment),
               buttonName: "Upcoming Expenses",
               route: SearchRecordScreen.routeName,
               arguments: [
@@ -39,12 +39,12 @@ class ActionsWidget extends StatelessWidget {
               ],
             ),
             ActionButton(
-              icon: Icon(Icons.summarize_outlined),
+              icon: const Icon(Icons.summarize_outlined),
               buttonName: "Monthly Summary",
               route: SearchRecordScreen.routeName,
               arguments: [DateTime.now().year, DateTime.now().month],
             ),
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
           ],
@@ -54,6 +54,7 @@ class ActionsWidget extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class ActionButton extends StatelessWidget {
   final Icon icon;
   final String buttonName;

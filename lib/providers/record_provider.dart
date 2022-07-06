@@ -2,7 +2,6 @@ import 'package:cash_flow_app/helpers/db_helper.dart';
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../utils/date_time_util.dart';
 import '../models/record.dart';
@@ -18,12 +17,6 @@ class RecordProvider with ChangeNotifier {
   RecordProvider() {
     fetchAndSetRecords();
   }
-
-  // get records {
-  //   var copiedRecords = [..._records];
-  //   copiedRecords.sort((r1, r2) => r1.id.compareTo(r1.id));
-  //   return copiedRecords;
-  // }
 
   void addRecord(Record record) {
     _records.add(record);
@@ -143,7 +136,6 @@ class RecordProvider with ChangeNotifier {
     if (id.isEmpty) return;
     Record? record = getRecordById(id);
     if (record != null) {
-      print("Found old record of ${record.name}! Will delete now.");
       DBHelper().removeRecord(record);
       _records.remove(record);
       notifyListeners();

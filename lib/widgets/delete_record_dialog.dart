@@ -21,13 +21,6 @@ Future<void> deleteRecordDialog(Record record, BuildContext context) async {
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
-            // SizedBox(
-            //   child: Text(
-            //     "If it's a recurring record then all"
-            //     "of its ocurrences will be deleted!",
-            //     style: Theme.of(context).textTheme.bodyText1,
-            //   ),
-            // ),
           ],
         ),
       ),

@@ -1,16 +1,16 @@
 import 'dart:math';
 
-import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:cash_flow_app/utils/date_time_util.dart';
 import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 class ThisMonthSummary extends StatefulWidget {
+  const ThisMonthSummary({Key? key}) : super(key: key);
+
   @override
   State<ThisMonthSummary> createState() => _ThisMonthSummaryState();
 }
@@ -43,7 +43,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: const CircularProgressIndicator(),
+        child: CircularProgressIndicator(),
       );
     }
 

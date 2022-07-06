@@ -1,4 +1,3 @@
-import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
@@ -7,7 +6,6 @@ import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:cash_flow_app/widgets/record_card.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinbox/flutter_spinbox.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/cash_flow_summary.dart';
@@ -48,7 +46,6 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("Dependencies changed in search record screen1");
     if (_isInit) {
       final yearMonthType =
           ModalRoute.of(context)?.settings.arguments as List<Object>?;
@@ -92,14 +89,6 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Lookup Record"),
-        actions: [
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.of(context).pushNamed(EditRecordScreen.routeName);
-          //   },
-          //   icon: const Icon(Icons.add),
-          // ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

@@ -1,7 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ButtonWrapper extends StatelessWidget {
   final Widget child;
   final double? width;

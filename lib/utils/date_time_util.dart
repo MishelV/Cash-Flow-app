@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class DateTimeUtil {
-  static const DATE_FORMAT = 'yyyy-mm-dd hh:mm';
+  static const dateFormat = 'yyyy-mm-dd hh:mm';
 
   static const months = [
     'January',
