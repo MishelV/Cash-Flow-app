@@ -50,7 +50,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
             _name = record.name;
             _recurenceInDays = record.repeatDays;
             _sign = record.value < 0 ? -1 : 1;
-            _value = record.value;
+            _value = record.value * _sign;
             _description = record.description;
             _recurring = _recurenceInDays > 0;
             _isCustomRecurrence = true;
@@ -251,7 +251,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                   height: 5,
                 ),
                 TextFormField(
-                  initialValue: (_value * _sign).toString(),
+                  initialValue: _value.toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty || value == "0") {
                       return 'Please add record value!';

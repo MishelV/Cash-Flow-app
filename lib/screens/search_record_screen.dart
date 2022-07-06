@@ -13,11 +13,6 @@ import 'package:provider/provider.dart';
 import '../widgets/cash_flow_summary.dart';
 import '../widgets/delete_record_dialog.dart';
 
-void editRecord(Record record, BuildContext context) {
-  Navigator.of(context)
-      .pushNamed(EditRecordScreen.routeName, arguments: record.id);
-}
-
 class SearchRecordScreen extends StatefulWidget {
   const SearchRecordScreen({Key? key}) : super(key: key);
 
@@ -36,8 +31,24 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   RecordType _recordType = RecordType.all;
   var _isInit = true;
 
+  void editRecord(Record record, BuildContext context) {
+    Navigator.of(context)
+        .pushNamed(EditRecordScreen.routeName, arguments: record.id)
+        .then((_) {
+      setRecords();
+    });
+  }
+
+  void deleteRecord(Record record, BuildContext context) {
+    deleteRecordDialog(record, context).then((_) {
+      setRecords();
+    });
+  }
+
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
+    print("Dependencies changed in search record screen1");
     if (_isInit) {
       final yearMonthType =
           ModalRoute.of(context)?.settings.arguments as List<Object>?;
@@ -55,7 +66,6 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     setState(() {
       _isInit = false;
     });
-    super.didChangeDependencies();
     setRecords();
   }
 

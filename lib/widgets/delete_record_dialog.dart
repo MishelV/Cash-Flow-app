@@ -5,7 +5,7 @@ import '../models/record.dart';
 import '../providers/record_provider.dart';
 import 'button_wrapper.dart';
 
-void deleteRecord(Record record, BuildContext context) async {
+Future<void> deleteRecordDialog(Record record, BuildContext context) async {
   await showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
