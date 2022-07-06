@@ -17,6 +17,12 @@ class RecordCard extends StatefulWidget {
 class _RecordCardState extends State<RecordCard> {
   bool _expanded = false;
 
+  TextStyle? _getTextStyle() {
+    return widget.record.value > 0
+        ? Theme.of(context).textTheme.bodyText1
+        : Theme.of(context).textTheme.bodyText2;
+  }
+
   Widget build(BuildContext context) {
     Color c = widget.record.value > 0
         ? Theme.of(context).colorScheme.surface
@@ -40,10 +46,7 @@ class _RecordCardState extends State<RecordCard> {
               title: SizedBox(
                 height: 20,
                 child: FittedBox(
-                  child: Text(
-                    widget.record.name,
-                    style: Theme.of(context).textTheme.bodyText2,
-                  ),
+                  child: Text(widget.record.name, style: _getTextStyle()),
                 ),
               ),
               subtitle: SizedBox(
@@ -56,10 +59,11 @@ class _RecordCardState extends State<RecordCard> {
                         widget.record.description.isEmpty
                             ? "No description."
                             : widget.record.description,
-                        style: Theme.of(context).textTheme.bodyText1,
+                        style: _getTextStyle(),
                       ),
                     Text(
                       DateTimeUtil.getDateString(widget.record.startDate),
+                      style: _getTextStyle(),
                     ),
                   ],
                 ),
@@ -67,7 +71,10 @@ class _RecordCardState extends State<RecordCard> {
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text("${widget.record.value} ₪"),
+                  Text(
+                    "${widget.record.value} ₪",
+                    style: _getTextStyle(),
+                  ),
                   if (widget.record.repeatDays != 0)
                     Icon(
                       Icons.repeat,

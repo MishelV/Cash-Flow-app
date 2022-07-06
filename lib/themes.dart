@@ -13,7 +13,8 @@ const colorScheme = ColorScheme(
   onError: Colors.black,
   surface: Color(0xFFB6D96A),
   onSurface: Color(0xFF9CD918),
-  inversePrimary: Color(0xBBF22C29),
+  inversePrimary: Color.fromARGB(255, 218, 75, 62),
+  // tertiary: Color.fromARGB(185, 177, 50, 48),
 );
 
 final elevatedButtonTheme = ElevatedButtonThemeData(
@@ -38,6 +39,11 @@ final textTheme = TextTheme(
     // color: Color(0xFF707365),
     fontFamily: 'Nunito',
   ),
+  headline3: const TextStyle(
+    fontSize: 16.0,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Nunito',
+  ),
   headline6: TextStyle(
     fontSize: 24.0,
     color: colorScheme.primary,
@@ -46,18 +52,20 @@ final textTheme = TextTheme(
   ),
   headline5: const TextStyle(
     fontSize: 16.0,
-    fontWeight: FontWeight.w400,
-    fontFamily: 'Nunito',
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Quicksand',
     color: Colors.white,
   ),
   bodyText1: const TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.w400,
+    fontFamily: 'Quicksand',
   ),
   bodyText2: const TextStyle(
     fontSize: 16.0,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w400,
     fontFamily: 'Quicksand',
+    color: Colors.white,
   ),
 );
 

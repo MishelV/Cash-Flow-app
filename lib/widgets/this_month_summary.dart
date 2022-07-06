@@ -103,11 +103,11 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                         children: [
                           Text(
                             "Expenses",
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
                             "${-1 * thisMonthSummary.expenseSum} ₪",
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
                       ),
@@ -115,11 +115,11 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                         children: [
                           Text(
                             "Income",
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
                             "${thisMonthSummary.incomeSum} ₪",
-                            style: Theme.of(context).textTheme.bodyText2,
+                            style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
                       ),
