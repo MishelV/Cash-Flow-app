@@ -269,7 +269,11 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                 child: ListView.builder(
                   itemBuilder: (ctx, index) {
                     final record = _records.elementAt(index);
-                    return RecordCard(record: record, editRecord: editRecord);
+                    return RecordCard(
+                      record: record,
+                      editRecord: editRecord,
+                      deleteRecord: deleteRecord,
+                    );
                   },
                   itemCount: _records.length,
                 ),

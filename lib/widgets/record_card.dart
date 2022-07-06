@@ -6,8 +6,13 @@ import 'package:flutter/material.dart';
 class RecordCard extends StatefulWidget {
   final Record record;
   final Function editRecord;
+  final Function deleteRecord;
 
-  const RecordCard({Key? key, required this.record, required this.editRecord})
+  const RecordCard(
+      {Key? key,
+      required this.record,
+      required this.editRecord,
+      required this.deleteRecord})
       : super(key: key);
 
   @override
@@ -16,6 +21,10 @@ class RecordCard extends StatefulWidget {
 
 class _RecordCardState extends State<RecordCard> {
   bool _expanded = false;
+
+  Color? _getIconColor() {
+    return widget.record.value < 0 ? Colors.white : null;
+  }
 
   TextStyle? _getTextStyle() {
     return widget.record.value > 0
@@ -39,6 +48,11 @@ class _RecordCardState extends State<RecordCard> {
         child: GestureDetector(
           onLongPress: () {
             widget.editRecord(widget.record, context);
+          },
+          onTap: () {
+            setState(() {
+              _expanded = !_expanded;
+            });
           },
           child: SizedBox(
             height: _expanded ? 120 : 70,
@@ -78,17 +92,17 @@ class _RecordCardState extends State<RecordCard> {
                   if (widget.record.repeatDays != 0)
                     Icon(
                       Icons.repeat,
+                      color: _getIconColor(),
                     ),
                 ],
               ),
               trailing: IconButton(
                 icon: Icon(
-                  Icons.expand_more,
+                  Icons.delete_forever,
+                  color: _getIconColor(),
                 ),
                 onPressed: () {
-                  setState(() {
-                    _expanded = !_expanded;
-                  });
+                  widget.deleteRecord(widget.record, context);
                 },
               ),
             ),
