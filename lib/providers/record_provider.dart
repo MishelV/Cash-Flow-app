@@ -102,8 +102,7 @@ class RecordProvider with ChangeNotifier {
         matchingRecords.add(r);
       }
     }
-    print("***********pop");
-    print("records size is ${matchingRecords.length}");
+
     return matchingRecords;
   }
 

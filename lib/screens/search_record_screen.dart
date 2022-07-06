@@ -78,12 +78,12 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       appBar: AppBar(
         title: const Text("Lookup Record"),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(EditRecordScreen.routeName);
-            },
-            icon: const Icon(Icons.add),
-          ),
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.of(context).pushNamed(EditRecordScreen.routeName);
+          //   },
+          //   icon: const Icon(Icons.add),
+          // ),
         ],
       ),
       body: Padding(
