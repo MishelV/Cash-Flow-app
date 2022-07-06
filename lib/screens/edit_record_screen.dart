@@ -20,17 +20,49 @@ class EditRecordScreen extends StatefulWidget {
 class _EditRecordScreenState extends State<EditRecordScreen> {
   final _formKey = GlobalKey<FormState>();
 
+  String _id = "record_" +
+      DateTime(2022).difference(DateTime.now()).inMilliseconds.toString();
   String? _startDate =
       DateFormat(DateTimeUtil.DATE_FORMAT).format(DateTime.now());
   String? _endDate = null;
   String? _name = "";
   int _recurenceInDays = 0;
-  int _sign = 1;
+  int _sign = 0;
   int _value = 0;
   String _description = '';
   bool _isLoading = false;
   bool _recurring = false;
   bool _isCustomRecurrence = false;
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit && (ModalRoute.of(context) != null)) {
+      final recordId = ModalRoute.of(context)!.settings.arguments as String;
+      if (recordId.isNotEmpty) {
+        Record? record = Provider.of<RecordProvider>(context, listen: false)
+            .getRecordById(recordId);
+        if (record != null) {
+          setState(() {
+            _id = record.id;
+            _startDate = record.startDate;
+            _endDate = record.endDate;
+            _name = record.name;
+            _recurenceInDays = record.repeatDays;
+            _sign = record.value < 0 ? -1 : 1;
+            _value = record.value;
+            _description = record.description;
+            _recurring = _recurenceInDays > 0;
+            _isCustomRecurrence = true;
+          });
+        }
+      }
+    }
+    setState(() {
+      _isInit = false;
+    });
+    super.didChangeDependencies();
+  }
 
   Future<void> _saveForm() async {
     final isValid = _formKey.currentState!.validate();
@@ -57,18 +89,23 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       _isLoading = true;
     });
 
-    Provider.of<RecordProvider>(context, listen: false).addRecord(
-      Record(
-        name: _name!,
-        value: _value * _sign,
-        id: "record_" +
-            DateTime(2022).difference(DateTime.now()).inMilliseconds.toString(),
-        startDate: _startDate!,
-        endDate: _endDate ?? "",
-        description: _description,
-        repeatDays: _recurring ? _recurenceInDays : 0,
-      ),
+    final newRecord = Record(
+      name: _name!,
+      value: _value * _sign,
+      id: _id,
+      startDate: _startDate!,
+      endDate: _endDate ?? "",
+      description: _description,
+      repeatDays: _recurring ? _recurenceInDays : 0,
     );
+
+    final recordProvider = Provider.of<RecordProvider>(context, listen: false);
+
+    if (recordProvider.getRecordById(newRecord.id) != null) {
+      recordProvider.replaceRecord(newRecord);
+    } else {
+      recordProvider.addRecord(newRecord);
+    }
 
     setState(() {
       _isLoading = false;
@@ -87,7 +124,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 Navigator.of(ctx).pop();
                 Navigator.of(ctx).pop();
               },
-              child: const Text("Back to main screen")),
+              child: const Text("Go Back")),
           TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
@@ -99,7 +136,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                   _isCustomRecurrence = false;
                 });
               },
-              child: const Text("Submit another one!")),
+              child: const Text("Submit another record!")),
         ],
       ),
     );
@@ -125,7 +162,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 TextFormField(
-                  initialValue: "",
+                  initialValue: _name,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please add record name!';
@@ -145,7 +182,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                   height: 5,
                 ),
                 TextFormField(
-                  initialValue: "",
+                  initialValue: _description,
                   validator: (value) {},
                   decoration: const InputDecoration(
                     labelText: "Description (Optional)",
@@ -171,6 +208,11 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                           }
                           return null;
                         },
+                        value: _sign == 0
+                            ? ""
+                            : _sign == 1
+                                ? "Income"
+                                : "Expense",
                         hint: const Text(
                           "Record Type",
                         ),
@@ -209,7 +251,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                   height: 5,
                 ),
                 TextFormField(
-                  initialValue: "",
+                  initialValue: (_value * _sign).toString(),
                   validator: (value) {
                     if (value == null || value.isEmpty || value == "0") {
                       return 'Please add record value!';
@@ -239,7 +281,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 ),
                 DateTimePicker(
                   type: DateTimePickerType.date,
-                  initialValue: DateTime.now().toString(),
+                  initialValue: _startDate,
                   firstDate: DateTime(2022),
                   lastDate: DateTime(DateTime.now().year + 1),
                   dateMask: "dd/MM/yyyy",
@@ -253,7 +295,10 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 ),
                 Row(
                   children: [
-                    const Text("Is the transaction recurring?"),
+                    Text(
+                      "Is the transaction recurring?",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                     Checkbox(
                       checkColor: Theme.of(context).colorScheme.onPrimary,
                       activeColor: Theme.of(context).colorScheme.primary,
@@ -277,6 +322,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                       }
                       return null;
                     },
+                    value: _isCustomRecurrence ? "Custom" : "",
                     hint: !_isCustomRecurrence && _recurenceInDays == 0
                         ? const Text("Set Record Recurrence")
                         : _isCustomRecurrence
@@ -333,7 +379,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 if (_recurring && _isCustomRecurrence)
                   TextFormField(
                     // The validator receives the text that the user has entered.
-                    initialValue: "0",
+                    initialValue: _recurenceInDays.toString(),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please add custom recurrence!';

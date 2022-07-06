@@ -13,6 +13,11 @@ import 'package:provider/provider.dart';
 import '../widgets/cash_flow_summary.dart';
 import '../widgets/delete_record_dialog.dart';
 
+void editRecord(Record record, BuildContext context) {
+  Navigator.of(context)
+      .pushNamed(EditRecordScreen.routeName, arguments: record.id);
+}
+
 class SearchRecordScreen extends StatefulWidget {
   const SearchRecordScreen({Key? key}) : super(key: key);
 
@@ -264,8 +269,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                 child: ListView.builder(
                   itemBuilder: (ctx, index) {
                     final record = _records.elementAt(index);
-                    return RecordCard(
-                        record: record, deleteRecord: deleteRecord);
+                    return RecordCard(record: record, editRecord: editRecord);
                   },
                   itemCount: _records.length,
                 ),

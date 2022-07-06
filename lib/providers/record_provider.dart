@@ -31,13 +31,27 @@ class RecordProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Record getRecordById(String id) {
-    return _records.firstWhere((element) => (element.id == id));
+  Record? getRecordById(String id) {
+    for (final record in _records) {
+      if (record.id == id) {
+        return record;
+      }
+    }
+    return null;
+  }
+
+  void replaceRecord(Record newRecord) {
+    Record? oldRecord = getRecordById(newRecord.id);
+    if (oldRecord != null) {
+      removeRecordById(oldRecord.id);
+      addRecord(newRecord);
+    }
   }
 
   List<Record> getRecordsByYearMonth(DateTime date) {
     List<Record> monthRecords = [];
-    for (Record r in _records) {
+    for (Record? record in _records) {
+      Record r = record!;
       if (DateTimeUtil.sameYearMonth(
           date, DateTimeUtil.getDateTime(r.startDate))) {
         monthRecords.add(r);
@@ -127,10 +141,13 @@ class RecordProvider with ChangeNotifier {
 
   void removeRecordById(String id) {
     if (id.isEmpty) return;
-    Record record = getRecordById(id);
-    DBHelper().removeRecord(record);
-    _records.remove(record);
-    notifyListeners();
+    Record? record = getRecordById(id);
+    if (record != null) {
+      print("Found old record of ${record.name}! Will delete now.");
+      DBHelper().removeRecord(record);
+      _records.remove(record);
+      notifyListeners();
+    }
   }
 
   void clearRecords() {

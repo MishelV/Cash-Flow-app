@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 class RecordCard extends StatefulWidget {
   final Record record;
-  final Function deleteRecord;
+  final Function editRecord;
 
-  const RecordCard({Key? key, required this.record, required this.deleteRecord})
+  const RecordCard({Key? key, required this.record, required this.editRecord})
       : super(key: key);
 
   @override
@@ -38,7 +38,7 @@ class _RecordCardState extends State<RecordCard> {
         shadowColor: c,
         child: GestureDetector(
           onLongPress: () {
-            widget.deleteRecord(widget.record, context);
+            widget.editRecord(widget.record, context);
           },
           child: SizedBox(
             height: _expanded ? 120 : 70,
