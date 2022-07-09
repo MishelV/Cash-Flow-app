@@ -3,6 +3,7 @@ import 'package:cash_flow_app/providers/record_provider.dart';
 import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +34,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   bool _recurring = false;
   bool _isCustomRecurrence = false;
   bool _isInit = true;
+  String _screenName = "Add Record";
 
   @override
   void didChangeDependencies() {
@@ -43,6 +45,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
             .getRecordById(recordId);
         if (record != null) {
           setState(() {
+            _screenName = "Edit Record";
             _id = record.id;
             _startDate = record.startDate;
             _endDate = record.endDate;
@@ -70,8 +73,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
     }
 
     if ((_recurring && _recurenceInDays == 0) || _value == 0) {
-      print(
-          "recurring $_recurring recurence days $_recurenceInDays value $_value");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
@@ -145,8 +146,8 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Edit Record",
+        title: Text(
+          _screenName,
         ),
         actions: [
           IconButton(onPressed: _saveForm, icon: const Icon(Icons.save_alt))
@@ -191,6 +192,10 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                       TextFormField(
                         initialValue: _description,
                         maxLength: 60,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        maxLengthEnforcement:
+                            MaxLengthEnforcement.truncateAfterCompositionEnds,
                         validator: (value) {
                           return null;
                         },
@@ -258,9 +263,15 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                       ),
                       TextFormField(
                         initialValue: _value.toString(),
+                        maxLength: 6,
                         validator: (value) {
                           if (value == null || value.isEmpty || value == "0") {
                             return 'Please add a valid record value!';
+                          } else if (value.contains(",") ||
+                              value.contains(".") ||
+                              value.contains(" ") ||
+                              value.contains("-")) {
+                            return "Value must be a valid natural number!";
                           }
                           return null;
                         },
@@ -277,7 +288,9 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                                   _value = int.parse(value);
                                 }
                                 // ignore: empty_catches
-                                catch (_) {}
+                                catch (_) {
+                                  _value = -1;
+                                }
                               },
                             );
                           }
@@ -388,7 +401,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                       ),
                       if (_recurring && _isCustomRecurrence)
                         TextFormField(
-                          // The validator receives the text that the user has entered.
                           initialValue: _recurenceInDays.toString(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -434,7 +446,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                           height: 108,
                         ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       ButtonWrapper(
                         width: 150,

@@ -34,11 +34,11 @@ class HomeScreen extends StatelessWidget {
           const Center(
             child: ActionsWidget(),
           ),
-          Center(
+          const Center(
             child: ThisMonthSummary(),
           ),
           const SizedBox(
-            height: 10,
+            height: 1,
           ),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
