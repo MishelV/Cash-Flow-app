@@ -24,12 +24,13 @@ class SearchRecordScreen extends StatefulWidget {
 class _SearchRecordScreenState extends State<SearchRecordScreen> {
   final _formKey = GlobalKey<FormState>();
   List<Record> _records = [];
-  DateTime _startDate = DateTime.now();
-  DateTime _endDate = DateTime(DateTime.now().year + 1);
-  String _keyword = "";
-  RecordType _recordType = RecordType.all;
+  var _startDate = DateTime.now();
+  var _endDate = DateTime(DateTime.now().year + 1);
+  var _keyword = "";
+  var _recordType = RecordType.all;
   var _isInit = true;
   var _isLoading = true;
+  var _screenName = "";
 
   void editRecord(Record record, BuildContext context) {
     Navigator.of(context)
@@ -58,6 +59,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
             setState(() {
               _startDate = DateTime(DateTime.now().year, DateTime.now().month);
               _endDate = _startDate.add(const Duration(days: 30));
+              _screenName = "This Month Summary";
             });
             break;
           case SearchType.upcomingExpenses:
@@ -65,6 +67,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
               _startDate = DateTime.now();
               _endDate = _startDate.add(const Duration(days: 365));
               _recordType = RecordType.expense;
+              _screenName = "Upcoming Expenses";
             });
             break;
           case SearchType.recordLookup:
@@ -72,6 +75,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
             setState(() {
               _startDate = DateTime(DateTime.now().year);
               _endDate = DateTime(DateTime.now().year + 1);
+              _screenName = "Search Record";
             });
             break;
         }
@@ -113,7 +117,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
         : Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
-              title: const Text("Lookup Record"),
+              title: Text(_screenName),
             ),
             body: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -64,67 +64,83 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: ButtonWrapper(
         inverse: thisMonthSummary.cashFlow < 0,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              FittedBox(
-                child: Text(
-                  "${DateTimeUtil.months[DateTime.now().month - 1]}'s Cash Flow: ${thisMonthSummary.cashFlow} ₪",
-                  style: Theme.of(context).textTheme.headline6,
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              if (noRecords)
-                Center(
-                  child: Text("No records for this month!",
-                      style: Theme.of(context).textTheme.bodyText1),
-                ),
-              if (!noRecords)
+        child: TextButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              SearchRecordScreen.routeName,
+              arguments: const [
+                SearchType.thisMonthSummary,
+              ],
+            );
+          },
+          style: TextButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(50),
+            ),
+          ),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
                 FittedBox(
-                  child: LinearPercentIndicator(
-                    width: 150.0,
-                    animation: true,
-                    barRadius: const Radius.circular(20),
-                    animationDuration: 1000,
-                    lineHeight: 20.0,
-                    leading: Column(
-                      children: [
-                        Text(
-                          "Expenses",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        Text(
-                          "${-1 * thisMonthSummary.expenseSum} ₪",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      ],
-                    ),
-                    trailing: Column(
-                      children: [
-                        Text(
-                          "Income",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                        Text(
-                          "${thisMonthSummary.incomeSum} ₪",
-                          style: Theme.of(context).textTheme.bodyText1,
-                        ),
-                      ],
-                    ),
-                    percent: spentPercent,
-                    center: Text(
-                      "Spent ${(spentPercent * 100).round()}%",
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-                    progressColor: Theme.of(context).colorScheme.inversePrimary,
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Text(
+                    "${DateTimeUtil.months[DateTime.now().month - 1]}'s Cash Flow: ${thisMonthSummary.cashFlow} ₪",
+                    style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
-            ],
+                const SizedBox(
+                  height: 20,
+                ),
+                if (noRecords)
+                  Center(
+                    child: Text("No records for this month!",
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ),
+                if (!noRecords)
+                  FittedBox(
+                    child: LinearPercentIndicator(
+                      width: 150.0,
+                      animation: true,
+                      barRadius: const Radius.circular(20),
+                      animationDuration: 1000,
+                      lineHeight: 20.0,
+                      leading: Column(
+                        children: [
+                          Text(
+                            "Expenses",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          Text(
+                            "${-1 * thisMonthSummary.expenseSum} ₪",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ],
+                      ),
+                      trailing: Column(
+                        children: [
+                          Text(
+                            "Income",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                          Text(
+                            "${thisMonthSummary.incomeSum} ₪",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ],
+                      ),
+                      percent: spentPercent,
+                      center: Text(
+                        "Spent ${(spentPercent * 100).round()}%",
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                      progressColor:
+                          Theme.of(context).colorScheme.inversePrimary,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),
