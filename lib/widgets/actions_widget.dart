@@ -3,6 +3,8 @@ import 'package:cash_flow_app/screens/edit_record_screen.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:flutter/material.dart';
 
+import '../models/search_type.dart';
+
 class ActionsWidget extends StatelessWidget {
   const ActionsWidget({Key? key}) : super(key: key);
 
@@ -27,22 +29,25 @@ class ActionsWidget extends StatelessWidget {
               icon: const Icon(Icons.search),
               buttonName: "Lookup Record",
               route: SearchRecordScreen.routeName,
+              arguments: const [
+                SearchType.recordLookup,
+              ],
             ),
             ActionButton(
               icon: const Icon(Icons.payment),
               buttonName: "Upcoming Expenses",
               route: SearchRecordScreen.routeName,
-              arguments: [
-                DateTime.now().year,
-                DateTime.now().month,
-                RecordType.expense
+              arguments: const [
+                SearchType.upcomingExpenses,
               ],
             ),
             ActionButton(
               icon: const Icon(Icons.summarize_outlined),
               buttonName: "Monthly Summary",
               route: SearchRecordScreen.routeName,
-              arguments: [DateTime.now().year, DateTime.now().month],
+              arguments: const [
+                SearchType.thisMonthSummary,
+              ],
             ),
             const SizedBox(
               width: 10,

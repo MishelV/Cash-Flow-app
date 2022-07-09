@@ -34,6 +34,9 @@ class DateTimeUtil {
   }
 
   static DateTime getDate(String date) {
+    if (date.contains(" ")) {
+      return getDateTime(date);
+    }
     final year = int.parse(date.split('-')[0]);
     final month = int.parse(date.split('-')[1]);
     final day = int.parse(date.split('-')[2]);

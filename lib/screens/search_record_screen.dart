@@ -8,6 +8,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/search_type.dart';
 import '../widgets/cash_flow_summary.dart';
 import '../widgets/delete_record_dialog.dart';
 
@@ -28,6 +29,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   String _keyword = "";
   RecordType _recordType = RecordType.all;
   var _isInit = true;
+  var _isLoading = true;
 
   void editRecord(Record record, BuildContext context) {
     Navigator.of(context)
@@ -47,23 +49,42 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
-      final yearMonthType =
+      final arguments =
           ModalRoute.of(context)?.settings.arguments as List<Object>?;
-      if (yearMonthType != null) {
-        setState(() {
-          _startDate =
-              DateTime(yearMonthType[0] as int, yearMonthType[1] as int);
-          _endDate = _startDate.add(const Duration(days: 30));
-          if (yearMonthType.length > 2) {
-            _recordType = yearMonthType[2] as RecordType;
-          }
-        });
+      if (arguments != null && arguments.isNotEmpty) {
+        final type = arguments[0] as SearchType;
+        switch (type) {
+          case SearchType.thisMonthSummary:
+            setState(() {
+              _startDate = DateTime(DateTime.now().year, DateTime.now().month);
+              _endDate = _startDate.add(const Duration(days: 30));
+            });
+            break;
+          case SearchType.upcomingExpenses:
+            setState(() {
+              _startDate = DateTime.now();
+              _endDate = _startDate.add(const Duration(days: 365));
+              _recordType = RecordType.expense;
+            });
+            break;
+          case SearchType.recordLookup:
+          default:
+            setState(() {
+              _startDate = DateTime(DateTime.now().year);
+              _endDate = DateTime(DateTime.now().year + 1);
+            });
+            break;
+        }
       }
     }
     setState(() {
       _isInit = false;
+      _isLoading = true;
     });
     setRecords();
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   void setRecords() {
@@ -85,225 +106,227 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   Widget build(BuildContext context) {
     final cashFlow = Provider.of<RecordProvider>(context, listen: false)
         .getCashFlowSummary(_records);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: const Text("Lookup Record"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Form(
-              key: _formKey,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(
-                    50,
-                  ),
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 2,
-                  ),
-                  color: Theme.of(context).colorScheme.background,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Theme.of(context).colorScheme.shadow,
-                      offset: Offset.fromDirection(1, 2),
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(10),
-                margin: const EdgeInsets.all(5),
-                height: 135,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        const SizedBox(
-                          width: 10,
+    return _isLoading
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Scaffold(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: const Text("Lookup Record"),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          50,
                         ),
-                        SizedBox(
-                          height: 30,
-                          width: 170,
-                          child: TextFormField(
-                            initialValue: "",
-                            decoration: const InputDecoration(
-                              labelText: "Keyword (Optional)",
-                              border: UnderlineInputBorder(),
-                              enabledBorder: InputBorder.none,
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                _keyword = value;
-                              });
-                            },
+                        border: Border.all(
+                          color: Colors.black,
+                          width: 2,
+                        ),
+                        color: Theme.of(context).colorScheme.background,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.shadow,
+                            offset: Offset.fromDirection(1, 2),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        SizedBox(
-                          height: 45,
-                          width: 100,
-                          child: DropdownButtonFormField<String>(
-                            isDense: true,
-                            validator: (value) {
-                              if (value == null || value == "") {
-                                return "Please pick the record type!";
-                              }
-                              return null;
-                            },
-                            hint: const Text("Type"),
-                            items:
-                                ["All", "Income", "Expense"].map((recordType) {
-                              return DropdownMenuItem<String>(
-                                child: SizedBox(
-                                  height: 20,
-                                  child: Text(recordType),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      margin: const EdgeInsets.all(5),
+                      height: 135,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                height: 30,
+                                width: 170,
+                                child: TextFormField(
+                                  initialValue: "",
+                                  decoration: const InputDecoration(
+                                    labelText: "Keyword (Optional)",
+                                    border: UnderlineInputBorder(),
+                                    enabledBorder: InputBorder.none,
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _keyword = value;
+                                    });
+                                  },
                                 ),
-                                value: recordType,
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              if (val != null) {
-                                setState(
-                                  () {
-                                    if (val == "Expense") {
-                                      _recordType = RecordType.expense;
-                                    } else if (val == "Income") {
-                                      _recordType = RecordType.income;
-                                    } else {
-                                      _recordType = RecordType.all;
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                height: 45,
+                                width: 100,
+                                child: DropdownButtonFormField<String>(
+                                  isDense: true,
+                                  validator: (value) {
+                                    if (value == null || value == "") {
+                                      return "Please pick the record type!";
+                                    }
+                                    return null;
+                                  },
+                                  hint: const Text("Type"),
+                                  items: ["All", "Income", "Expense"]
+                                      .map((recordType) {
+                                    return DropdownMenuItem<String>(
+                                      child: SizedBox(
+                                        height: 20,
+                                        child: Text(recordType),
+                                      ),
+                                      value: recordType,
+                                    );
+                                  }).toList(),
+                                  onChanged: (val) {
+                                    if (val != null) {
+                                      setState(
+                                        () {
+                                          if (val == "Expense") {
+                                            _recordType = RecordType.expense;
+                                          } else if (val == "Income") {
+                                            _recordType = RecordType.income;
+                                          } else {
+                                            _recordType = RecordType.all;
+                                          }
+                                        },
+                                      );
                                     }
                                   },
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        SizedBox(
-                          width: 80,
-                          child: DateTimePicker(
-                            type: DateTimePickerType.date,
-                            initialValue: _startDate.toString(),
-                            firstDate: DateTime(DateTime.now().year - 10),
-                            lastDate: _endDate,
-                            dateMask: "dd/MM/yyyy",
-                            dateLabelText: 'Start Date',
-                            onSaved: (val) {
-                              if (val != null) {
-                                setState(() {
-                                  _startDate = DateTimeUtil.getDateTime(val);
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        SizedBox(
-                          width: 80,
-                          child: DateTimePicker(
-                            type: DateTimePickerType.date,
-                            initialValue: _endDate.toString(),
-                            firstDate: _startDate,
-                            lastDate: DateTime(DateTime.now().year + 10),
-                            dateMask: "dd/MM/yyyy",
-                            dateLabelText: 'End Date',
-                            onSaved: (val) {
-                              if (val != null) {
-                                setState(() {
-                                  _endDate = DateTimeUtil.getDateTime(val);
-                                });
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        ButtonWrapper(
-                          width: 50,
-                          height: 50,
-                          child: TextButton(
-                            onPressed: setRecords,
-                            style: TextButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
+                                ),
                               ),
-                            ),
-                            child: Text(
-                              "Go!",
-                              style: Theme.of(context).textTheme.bodyText1,
-                            ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              SizedBox(
+                                width: 80,
+                                child: DateTimePicker(
+                                  type: DateTimePickerType.date,
+                                  initialValue: _startDate.toString(),
+                                  firstDate: DateTime(DateTime.now().year - 10),
+                                  lastDate: _endDate,
+                                  dateMask: "dd/MM/yyyy",
+                                  dateLabelText: 'Start Date',
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _startDate =
+                                          DateTimeUtil.getDateTime(val);
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              SizedBox(
+                                width: 80,
+                                child: DateTimePicker(
+                                  type: DateTimePickerType.date,
+                                  initialValue: _endDate.toString(),
+                                  firstDate: _startDate,
+                                  lastDate: DateTime(DateTime.now().year + 10),
+                                  dateMask: "dd/MM/yyyy",
+                                  dateLabelText: 'End Date',
+                                  onChanged: (val) {
+                                    setState(() {
+                                      _endDate = DateTimeUtil.getDateTime(val);
+                                    });
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              ButtonWrapper(
+                                width: 50,
+                                height: 50,
+                                child: TextButton(
+                                  onPressed: setRecords,
+                                  style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(50),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    "Go!",
+                                    style:
+                                        Theme.of(context).textTheme.bodyText1,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 26,
+                  ),
+                  if (_records.isNotEmpty)
+                    SizedBox(
+                      width: 300,
+                      height: 380,
+                      child: ListView.builder(
+                        itemBuilder: (ctx, index) {
+                          final record = _records.elementAt(index);
+                          return RecordCard(
+                            record: record,
+                            editRecord: editRecord,
+                            deleteRecord: deleteRecord,
+                          );
+                        },
+                        itemCount: _records.length,
+                      ),
+                    ),
+                  if (_records.isNotEmpty)
+                    CashFlowSummaryWidget(
+                      cashFlow: cashFlow,
+                    ),
+                  if (_records.isEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 150,
+                        ),
+                        Text(
+                          "No records to show!",
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                        SizedBox(
+                          height: 180,
+                          child: Image.asset(
+                            'assets/images/dollar.gif',
                           ),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 26,
-            ),
-            if (_records.isNotEmpty)
-              SizedBox(
-                width: 300,
-                height: 380,
-                child: ListView.builder(
-                  itemBuilder: (ctx, index) {
-                    final record = _records.elementAt(index);
-                    return RecordCard(
-                      record: record,
-                      editRecord: editRecord,
-                      deleteRecord: deleteRecord,
-                    );
-                  },
-                  itemCount: _records.length,
-                ),
-              ),
-            if (_records.isNotEmpty)
-              CashFlowSummaryWidget(
-                cashFlow: cashFlow,
-              ),
-            if (_records.isEmpty)
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 150,
-                  ),
-                  Text(
-                    "No records to show!",
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  SizedBox(
-                    height: 180,
-                    child: Image.asset(
-                      'assets/images/dollar.gif',
-                    ),
-                  ),
                 ],
               ),
-          ],
-        ),
-      ),
-    );
+            ),
+          );
   }
 }

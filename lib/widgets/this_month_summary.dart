@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../models/search_type.dart';
+
 class ThisMonthSummary extends StatefulWidget {
   const ThisMonthSummary({Key? key}) : super(key: key);
 
@@ -64,8 +66,12 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
         inverse: thisMonthSummary.cashFlow < 0,
         child: TextButton(
           onPressed: () {
-            Navigator.of(context).pushNamed(SearchRecordScreen.routeName,
-                arguments: [DateTime.now().year, DateTime.now().month]);
+            Navigator.of(context).pushNamed(
+              SearchRecordScreen.routeName,
+              arguments: const [
+                SearchType.thisMonthSummary,
+              ],
+            );
           },
           style: TextButton.styleFrom(
             shape: RoundedRectangleBorder(

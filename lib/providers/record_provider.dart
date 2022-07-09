@@ -43,8 +43,7 @@ class RecordProvider with ChangeNotifier {
 
   List<Record> getRecordsByYearMonth(DateTime date) {
     List<Record> monthRecords = [];
-    for (Record? record in _records) {
-      Record r = record!;
+    for (Record r in _records) {
       if (DateTimeUtil.sameYearMonth(
           date, DateTimeUtil.getDateTime(r.startDate))) {
         monthRecords.add(r);
@@ -56,10 +55,12 @@ class RecordProvider with ChangeNotifier {
             DateTime(date.year, date.month + 1),
             DateTimeUtil.getDateTime(r.endDate));
         startDate = startDate.add(recurrenceInDays);
+        int runningIndex = 0;
         while (startDate.isBefore(endDate)) {
+          runningIndex += 1;
           if (DateTimeUtil.sameYearMonth(date, startDate)) {
             Record t = Record(
-                id: "t_${DateTime.now().millisecondsSinceEpoch}",
+                id: "t$runningIndex${DateTime.now().millisecondsSinceEpoch}",
                 repeatDays: r.repeatDays,
                 name: r.name,
                 endDate: r.endDate,
@@ -80,7 +81,11 @@ class RecordProvider with ChangeNotifier {
 
     while (startDate.isBefore(endDate)) {
       List<Record> currMonthRecords = getRecordsByYearMonth(startDate);
-      records.addAll(currMonthRecords);
+      for (final r in currMonthRecords) {
+        if (recordIsInTimeFrame(r, startDate, endDate)) {
+          records.add(r);
+        }
+      }
       if (startDate.month == 12) {
         startDate = DateTime(startDate.year + 1);
       } else {
@@ -88,6 +93,11 @@ class RecordProvider with ChangeNotifier {
       }
     }
     return records;
+  }
+
+  bool recordIsInTimeFrame(Record r, DateTime start, DateTime end) {
+    return start.isBefore(DateTimeUtil.getDateTime(r.startDate)) &&
+        end.isAfter(DateTimeUtil.getDateTime(r.startDate));
   }
 
   bool recordTypeMatch(Record r, RecordType t) {
