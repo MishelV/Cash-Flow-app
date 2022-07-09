@@ -115,12 +115,17 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
             appBar: AppBar(
               title: const Text("Lookup Record"),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Form(
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(width: 1, color: Colors.grey),
+                    ),
+                  ),
+                  child: Form(
                     key: _formKey,
                     child: Container(
                       decoration: BoxDecoration(
@@ -153,14 +158,13 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                                 width: 10,
                               ),
                               SizedBox(
-                                height: 30,
+                                height: 45,
                                 width: 170,
                                 child: TextFormField(
                                   initialValue: "",
                                   decoration: const InputDecoration(
-                                    labelText: "Keyword (Optional)",
                                     border: UnderlineInputBorder(),
-                                    enabledBorder: InputBorder.none,
+                                    hintText: "Keyword (Optional)",
                                   ),
                                   onChanged: (value) {
                                     setState(() {
@@ -281,51 +285,49 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    width: 26,
-                  ),
-                  if (_records.isNotEmpty)
-                    SizedBox(
-                      width: 300,
-                      height: 380,
-                      child: ListView.builder(
-                        itemBuilder: (ctx, index) {
-                          final record = _records.elementAt(index);
-                          return RecordCard(
+                ),
+                if (_records.isNotEmpty)
+                  Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (ctx, index) {
+                        final record = _records.elementAt(index);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 30),
+                          child: RecordCard(
                             record: record,
                             editRecord: editRecord,
                             deleteRecord: deleteRecord,
-                          );
-                        },
-                        itemCount: _records.length,
-                      ),
-                    ),
-                  if (_records.isNotEmpty)
-                    CashFlowSummaryWidget(
-                      cashFlow: cashFlow,
-                    ),
-                  if (_records.isEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 150,
-                        ),
-                        Text(
-                          "No records to show!",
-                          style: Theme.of(context).textTheme.headline4,
-                        ),
-                        SizedBox(
-                          height: 180,
-                          child: Image.asset(
-                            'assets/images/dollar.gif',
                           ),
-                        ),
-                      ],
+                        );
+                      },
+                      itemCount: _records.length,
                     ),
-                ],
-              ),
+                  ),
+                if (_records.isNotEmpty)
+                  CashFlowSummaryWidget(
+                    cashFlow: cashFlow,
+                  ),
+                if (_records.isEmpty)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(
+                        height: 150,
+                      ),
+                      Text(
+                        "No records to show!",
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                      SizedBox(
+                        height: 180,
+                        child: Image.asset(
+                          'assets/images/dollar.gif',
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
             ),
           );
   }

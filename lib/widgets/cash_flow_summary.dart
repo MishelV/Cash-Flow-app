@@ -11,8 +11,13 @@ class CashFlowSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      padding: const EdgeInsets.all(12.0),
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(width: 1, color: Colors.grey),
+        ),
+      ),
       child: ButtonWrapper(
         inverse: cashFlow.cashFlow < 0,
         child: Column(
