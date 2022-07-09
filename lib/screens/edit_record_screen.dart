@@ -22,8 +22,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
 
   String _id = "record_" +
       DateTime(2022).difference(DateTime.now()).inMilliseconds.toString();
-  String? _startDate =
-      DateFormat(DateTimeUtil.dateFormat).format(DateTime.now());
+  String _startDate = DateTime.now().toString();
   String? _endDate;
   String? _name = "";
   int _recurenceInDays = 0;
@@ -70,9 +69,9 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       return;
     }
 
-    if (_startDate == null ||
-        (_recurring && _recurenceInDays == 0) ||
-        _value == 0) {
+    if ((_recurring && _recurenceInDays == 0) || _value == 0) {
+      print(
+          "recurring $_recurring recurence days $_recurenceInDays value $_value");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
@@ -93,7 +92,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       name: _name!,
       value: _value * _sign,
       id: _id,
-      startDate: _startDate!,
+      startDate: _startDate,
       endDate: _endDate ?? "",
       description: _description,
       repeatDays: _recurring ? _recurenceInDays : 0,
@@ -168,6 +167,8 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                     children: <Widget>[
                       TextFormField(
                         initialValue: _name,
+                        maxLines: 1,
+                        maxLength: 15,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please add record name!';
@@ -189,6 +190,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                       ),
                       TextFormField(
                         initialValue: _description,
+                        maxLength: 60,
                         validator: (value) {
                           return null;
                         },
@@ -258,7 +260,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                         initialValue: _value.toString(),
                         validator: (value) {
                           if (value == null || value.isEmpty || value == "0") {
-                            return 'Please add record value!';
+                            return 'Please add a valid record value!';
                           }
                           return null;
                         },
@@ -268,7 +270,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                         ),
                         keyboardType: TextInputType.number,
                         onChanged: (value) {
-                          if (value == "") {
+                          if (value != "") {
                             setState(
                               () {
                                 try {
@@ -292,7 +294,9 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                         dateMask: "dd/MM/yyyy",
                         dateLabelText: 'Record Date',
                         onSaved: (val) {
-                          _startDate = val;
+                          if (val != null) {
+                            _startDate = val;
+                          }
                         },
                       ),
                       const SizedBox(

@@ -31,6 +31,22 @@ class _RecordCardState extends State<RecordCard> {
         : Theme.of(context).textTheme.bodyText2;
   }
 
+  TextStyle? _getSmallerTextStyle() {
+    TextStyle? style = widget.record.value > 0
+        ? Theme.of(context).textTheme.bodyText1
+        : Theme.of(context).textTheme.bodyText2;
+
+    if (style != null) {
+      return TextStyle(
+        fontSize: style.fontSize! - 2.0,
+        fontWeight: style.fontWeight,
+        fontFamily: style.fontFamily,
+        color: style.color,
+      );
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     Color c = widget.record.value > 0
@@ -73,11 +89,11 @@ class _RecordCardState extends State<RecordCard> {
                         widget.record.description.isEmpty
                             ? "No description."
                             : widget.record.description,
-                        style: _getTextStyle(),
+                        style: _getSmallerTextStyle(),
                       ),
                     Text(
                       DateTimeUtil.getDateString(widget.record.startDate),
-                      style: _getTextStyle(),
+                      style: _getSmallerTextStyle(),
                     ),
                   ],
                 ),
