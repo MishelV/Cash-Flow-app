@@ -262,7 +262,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                         height: 5,
                       ),
                       TextFormField(
-                        initialValue: _value.toString(),
+                        initialValue: "",
                         maxLength: 6,
                         validator: (value) {
                           if (value == null || value.isEmpty || value == "0") {
@@ -288,9 +288,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                                   _value = int.parse(value);
                                 }
                                 // ignore: empty_catches
-                                catch (_) {
-                                  _value = -1;
-                                }
+                                catch (_) {}
                               },
                             );
                           }

@@ -1,3 +1,4 @@
+import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:flutter/material.dart';
 
 import '../models/cash_flow_summary.dart';
@@ -12,25 +13,8 @@ class CashFlowSummaryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(
-            50,
-          ),
-          border: Border.all(
-            color: cashFlow.cashFlow > 0
-                ? Theme.of(context).colorScheme.primary
-                : Theme.of(context).colorScheme.error,
-            width: 4,
-          ),
-          color: Theme.of(context).colorScheme.background,
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).colorScheme.shadow,
-              offset: Offset.fromDirection(1, 2),
-            ),
-          ],
-        ),
+      child: ButtonWrapper(
+        inverse: cashFlow.cashFlow < 0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

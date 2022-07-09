@@ -37,9 +37,6 @@ class HomeScreen extends StatelessWidget {
           const Center(
             child: ThisMonthSummary(),
           ),
-          const SizedBox(
-            height: 1,
-          ),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
