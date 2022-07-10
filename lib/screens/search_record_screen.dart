@@ -86,23 +86,26 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       _isLoading = true;
     });
     setRecords();
-    setState(() {
-      _isLoading = false;
-    });
   }
 
-  void setRecords() {
+  Future<void> setRecords() async {
+    setState(() {
+      _isLoading = true;
+    });
     if (FocusManager.instance.primaryFocus != null) {
       FocusManager.instance.primaryFocus!.unfocus();
     }
 
+    final records = await Provider.of<RecordProvider>(context, listen: false)
+        .getRecordsFromTimeFrameByKeyword(
+            _keyword, _startDate, _endDate, _recordType);
+
     setState(() {
-      _records = Provider.of<RecordProvider>(context, listen: false)
-          .getRecordsFromTimeFrameByKeyword(
-              _keyword, _startDate, _endDate, _recordType);
+      _records = records;
       _records.sort(
         (a, b) => a.startDate.compareTo(b.startDate),
       );
+      _isLoading = false;
     });
   }
 
@@ -110,16 +113,16 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   Widget build(BuildContext context) {
     final cashFlow = Provider.of<RecordProvider>(context, listen: false)
         .getCashFlowSummary(_records);
-    return _isLoading
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              title: Text(_screenName),
-            ),
-            body: Column(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text(_screenName),
+      ),
+      body: _isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
@@ -333,6 +336,6 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                   ),
               ],
             ),
-          );
+    );
   }
 }

@@ -105,8 +105,8 @@ class RecordProvider with ChangeNotifier {
         t == RecordType.income && r.value < 0);
   }
 
-  List<Record> getRecordsFromTimeFrameByKeyword(
-      String keyword, DateTime startDate, DateTime endDate, RecordType type) {
+  Future<List<Record>> getRecordsFromTimeFrameByKeyword(String keyword,
+      DateTime startDate, DateTime endDate, RecordType type) async {
     List<Record> records = getRecordsByTimeFrame(startDate, endDate);
     if (keyword.isEmpty && type == RecordType.all) return records;
 
