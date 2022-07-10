@@ -15,27 +15,31 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         children: [
           const SizedBox(
-            height: 10,
+            height: 15,
+          ),
+          SizedBox(
+            height: 200,
+            child: Image.asset(
+              'assets/images/finance.png',
+            ),
           ),
           Text(
             "Cash Flow.",
             style: Theme.of(context).textTheme.headline1,
           ),
-          SizedBox(
-            height: 150,
-            child: Image.asset(
-              'assets/images/finance.png',
-            ),
-          ),
           const SizedBox(
-            height: 1,
+            height: 10,
           ),
-          const HelloWidget(userName: "There"),
+          // const HelloWidget(userName: "There"),
           const Center(
             child: ActionsWidget(),
           ),
+
           const Center(
             child: ThisMonthSummary(),
+          ),
+          const SizedBox(
+            height: 1,
           ),
         ],
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
