@@ -262,7 +262,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                         height: 5,
                       ),
                       TextFormField(
-                        initialValue: "",
+                        initialValue: _value == 0 ? "" : _value.toString(),
                         maxLength: 6,
                         validator: (value) {
                           if (value == null || value.isEmpty || value == "0") {
