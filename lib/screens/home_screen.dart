@@ -11,6 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final rotatingLogo = RotatingAppLogo();
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
@@ -20,7 +21,7 @@ class HomeScreen extends StatelessWidget {
           ),
           SizedBox(
             height: 220,
-            child: RotatingAppLogo(),
+            child: rotatingLogo,
           ),
           Text(
             "Cash Flow.",
@@ -30,8 +31,12 @@ class HomeScreen extends StatelessWidget {
             height: 10,
           ),
           // const HelloWidget(userName: "There"),
-          const Center(
-            child: ActionsWidget(),
+          Center(
+            child: ActionsWidget(beforeAction: () {
+              rotatingLogo.stopAnimation();
+            }, afterAction: () {
+              rotatingLogo.continueAnimation();
+            }),
           ),
 
           const Center(

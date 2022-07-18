@@ -5,26 +5,57 @@ class RotatingAppLogo extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  var _turns = 0.0;
+  late AnimationController _controller;
+
+  void stopAnimation() {
+    _controller.stop();
+  }
+
+  void continueAnimation() {
+    _controller.reset();
+    _controller.forward();
+  }
 
   @override
   State<RotatingAppLogo> createState() => _RotatingAppLogoState();
 }
 
-class _RotatingAppLogoState extends State<RotatingAppLogo> {
-  void _turn() {
-    setState(() {
-      widget._turns += 1.0 / 8.0;
-    });
+class _RotatingAppLogoState extends State<RotatingAppLogo>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    widget._controller = AnimationController(
+      duration: const Duration(seconds: 600),
+      vsync: this,
+    );
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    widget._controller.reset();
+    widget._controller.forward();
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    widget._controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _turn,
-      child: AnimatedRotation(
-        turns: widget._turns,
-        duration: const Duration(milliseconds: 50),
+      onTap: () {
+        if (widget._controller.isAnimating) {
+          widget._controller.stop();
+        } else {
+          widget._controller.forward();
+        }
+      },
+      child: RotationTransition(
+        turns: Tween(begin: 0.0, end: 40.0).animate(widget._controller),
         child: Image.asset(
           'assets/images/finance.png',
         ),
