@@ -95,16 +95,17 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       FocusManager.instance.primaryFocus!.unfocus();
     }
 
-    final records = await Provider.of<RecordProvider>(context, listen: false)
+    Provider.of<RecordProvider>(context, listen: false)
         .getRecordsFromTimeFrameByKeyword(
-            _keyword, _startDate, _endDate, _recordType);
-
-    setState(() {
-      _records = records;
-      _records.sort(
-        (a, b) => a.startDate.compareTo(b.startDate),
-      );
-      _isLoading = false;
+            _keyword, _startDate, _endDate, _recordType)
+        .then((records) {
+      setState(() {
+        _records = records;
+        _records.sort(
+          (a, b) => a.startDate.compareTo(b.startDate),
+        );
+        _isLoading = false;
+      });
     });
   }
 
