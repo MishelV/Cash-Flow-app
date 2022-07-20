@@ -30,7 +30,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   int _sign = 0;
   int _value = 0;
   String _description = '';
-  bool _isLoading = false;
   bool _recurring = false;
   bool _isCustomRecurrence = false;
   bool _isInit = true;
@@ -85,9 +84,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       return;
     }
     _formKey.currentState!.save();
-    setState(() {
-      _isLoading = true;
-    });
 
     final newRecord = Record(
       name: _name!,
@@ -107,9 +103,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       recordProvider.addRecord(newRecord);
     }
 
-    setState(() {
-      _isLoading = false;
-    });
     FocusManager.instance.primaryFocus?.unfocus();
 
     await showDialog(
@@ -132,7 +125,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 setState(() {
                   _startDate = DateTime.now().toString();
                   _recurenceInDays = 0;
-                  _isLoading = false;
                   _isCustomRecurrence = false;
                 });
               },
@@ -153,320 +145,314 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
           IconButton(onPressed: _saveForm, icon: const Icon(Icons.save_alt))
         ],
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      TextFormField(
-                        initialValue: _name,
-                        maxLines: 1,
-                        maxLength: 15,
+      body: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                TextFormField(
+                  initialValue: _name,
+                  maxLines: 1,
+                  maxLength: 15,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please add record name!';
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: "Record Name",
+                    border: UnderlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _name = value;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  initialValue: _description,
+                  maxLength: 60,
+                  keyboardType: TextInputType.multiline,
+                  maxLines: null,
+                  maxLengthEnforcement:
+                      MaxLengthEnforcement.truncateAfterCompositionEnds,
+                  validator: (value) {
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: "Description (Optional)",
+                    border: UnderlineInputBorder(),
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      _description = value;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DropdownButtonFormField<String>(
+                        isDense: true,
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please add record name!';
+                          if (value == null || value == "") {
+                            return "Please pick the record type!";
                           }
                           return null;
                         },
-                        decoration: const InputDecoration(
-                          labelText: "Record Name",
-                          border: UnderlineInputBorder(),
+                        value: _sign == 0
+                            ? null
+                            : _sign == 1
+                                ? "Income"
+                                : "Expense",
+                        hint: const Text(
+                          "Record Type",
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            _name = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        initialValue: _description,
-                        maxLength: 60,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        maxLengthEnforcement:
-                            MaxLengthEnforcement.truncateAfterCompositionEnds,
-                        validator: (value) {
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Description (Optional)",
-                          border: UnderlineInputBorder(),
-                        ),
-                        onChanged: (value) {
-                          setState(() {
-                            _description = value;
-                          });
-                        },
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField<String>(
-                              isDense: true,
-                              validator: (value) {
-                                if (value == null || value == "") {
-                                  return "Please pick the record type!";
-                                }
-                                return null;
-                              },
-                              value: _sign == 0
-                                  ? null
-                                  : _sign == 1
-                                      ? "Income"
-                                      : "Expense",
-                              hint: const Text(
-                                "Record Type",
-                              ),
-                              items: const [
-                                DropdownMenuItem<String>(
-                                  child: Text("Expense"),
-                                  value: "Expense",
-                                ),
-                                DropdownMenuItem<String>(
-                                  child: Text("Income"),
-                                  value: "Income",
-                                ),
-                              ],
-                              onChanged: (val) {
-                                if (val != null) {
-                                  setState(
-                                    () {
-                                      if (val == "Expense") {
-                                        _sign = -1;
-                                      } else {
-                                        _sign = 1;
-                                      }
-                                    },
-                                  );
-                                }
-                              },
-                            ),
+                        items: const [
+                          DropdownMenuItem<String>(
+                            child: Text("Expense"),
+                            value: "Expense",
+                          ),
+                          DropdownMenuItem<String>(
+                            child: Text("Income"),
+                            value: "Income",
                           ),
                         ],
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      TextFormField(
-                        initialValue: _value == 0 ? "" : _value.toString(),
-                        maxLength: 6,
-                        validator: (value) {
-                          if (value == null || value.isEmpty || value == "0") {
-                            return 'Please add a valid record value!';
-                          } else if (value.contains(",") ||
-                              value.contains(".") ||
-                              value.contains(" ") ||
-                              value.contains("-")) {
-                            return "Value must be a valid natural number!";
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Value of the Record",
-                          border: UnderlineInputBorder(),
-                        ),
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          if (value != "") {
+                        onChanged: (val) {
+                          if (val != null) {
                             setState(
                               () {
-                                try {
-                                  _value = int.parse(value);
+                                if (val == "Expense") {
+                                  _sign = -1;
+                                } else {
+                                  _sign = 1;
                                 }
-                                // ignore: empty_catches
-                                catch (_) {}
                               },
                             );
                           }
                         },
                       ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      DateTimePicker(
-                        type: DateTimePickerType.date,
-                        initialValue: _startDate,
-                        firstDate: DateTime(2022),
-                        lastDate: DateTime(DateTime.now().year + 1),
-                        dateMask: "dd/MM/yyyy",
-                        dateLabelText: 'Record Date',
-                        onSaved: (val) {
-                          if (val != null) {
-                            _startDate = val;
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                TextFormField(
+                  initialValue: _value == 0 ? "" : _value.toString(),
+                  maxLength: 6,
+                  validator: (value) {
+                    if (value == null || value.isEmpty || value == "0") {
+                      return 'Please add a valid record value!';
+                    } else if (value.contains(",") ||
+                        value.contains(".") ||
+                        value.contains(" ") ||
+                        value.contains("-")) {
+                      return "Value must be a valid natural number!";
+                    }
+                    return null;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: "Value of the Record",
+                    border: UnderlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    if (value != "") {
+                      setState(
+                        () {
+                          try {
+                            _value = int.parse(value);
                           }
+                          // ignore: empty_catches
+                          catch (_) {}
                         },
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            "Is the transaction recurring?",
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                          Checkbox(
-                            checkColor: Theme.of(context).colorScheme.onPrimary,
-                            activeColor: Theme.of(context).colorScheme.primary,
-                            value: _recurring,
-                            onChanged: (val) {
-                              setState(
-                                () {
-                                  _recurring = val!;
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                      if (_recurring)
-                        DropdownButtonFormField<String>(
-                          isDense: true,
-                          validator: (value) {
-                            if (value == null || value == "") {
-                              return "Please set type of record!";
-                            }
-                            return null;
+                      );
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                DateTimePicker(
+                  type: DateTimePickerType.date,
+                  initialValue: _startDate,
+                  firstDate: DateTime(2022),
+                  lastDate: DateTime(DateTime.now().year + 1),
+                  dateMask: "dd/MM/yyyy",
+                  dateLabelText: 'Record Date',
+                  onSaved: (val) {
+                    if (val != null) {
+                      _startDate = val;
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 5,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "Is the transaction recurring?",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    Checkbox(
+                      checkColor: Theme.of(context).colorScheme.onPrimary,
+                      activeColor: Theme.of(context).colorScheme.primary,
+                      value: _recurring,
+                      onChanged: (val) {
+                        setState(
+                          () {
+                            _recurring = val!;
                           },
-                          value: _isCustomRecurrence ? "Custom" : null,
-                          hint: !_isCustomRecurrence && _recurenceInDays == 0
-                              ? const Text("Set Record Recurrence")
-                              : _isCustomRecurrence
-                                  ? const Text("Custom")
-                                  : Text(
-                                      "Repeats every $_recurenceInDays days."),
-                          items: [
-                            "Daily",
-                            "Weekly",
-                            "Bi-weekly",
-                            "Monthly",
-                            "Yearly",
-                            "Custom"
-                          ].map(
-                            (recurrence) {
-                              return DropdownMenuItem<String>(
-                                child: SizedBox(
-                                  height: 40,
-                                  child: recurrence == "Custom"
-                                      ? const Text("Custom")
-                                      : Text(recurrence),
-                                ),
-                                value: recurrence.toString(),
-                              );
-                            },
-                          ).toList(),
-                          onChanged: (val) {
-                            if (val != null) {
-                              setState(
-                                () {
-                                  if (val == "Custom") {
-                                    _isCustomRecurrence = true;
-                                  } else {
-                                    _isCustomRecurrence = false;
-                                    if (val == "Daily") {
-                                      _recurenceInDays = 1;
-                                    } else if (val == "Weekly") {
-                                      _recurenceInDays = 7;
-                                    } else if (val == "Bi-weekly") {
-                                      _recurenceInDays = 14;
-                                    } else if (val == "Monthly") {
-                                      _recurenceInDays = 30;
-                                    } else if (val == "Yearly") {
-                                      _recurenceInDays = 365;
-                                    }
-                                  }
-                                },
-                              );
-                            }
-                          },
-                        ),
-                      const SizedBox(
-                        height: 15,
-                      ),
-                      if (_recurring && _isCustomRecurrence)
-                        TextFormField(
-                          initialValue: _recurenceInDays.toString(),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please add custom recurrence!';
-                            }
-                            try {
-                              _recurenceInDays = int.parse(value);
-                              return null;
-                            } catch (_) {
-                              return 'Please add custom recurrence!';
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                if (_recurring)
+                  DropdownButtonFormField<String>(
+                    isDense: true,
+                    validator: (value) {
+                      if (value == null || value == "") {
+                        return "Please set type of record!";
+                      }
+                      return null;
+                    },
+                    value: _isCustomRecurrence ? "Custom" : null,
+                    hint: !_isCustomRecurrence && _recurenceInDays == 0
+                        ? const Text("Set Record Recurrence")
+                        : _isCustomRecurrence
+                            ? const Text("Custom")
+                            : Text("Repeats every $_recurenceInDays days."),
+                    items: [
+                      "Daily",
+                      "Weekly",
+                      "Bi-weekly",
+                      "Monthly",
+                      "Yearly",
+                      "Custom"
+                    ].map(
+                      (recurrence) {
+                        return DropdownMenuItem<String>(
+                          child: SizedBox(
+                            height: 40,
+                            child: recurrence == "Custom"
+                                ? const Text("Custom")
+                                : Text(recurrence),
+                          ),
+                          value: recurrence.toString(),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (val) {
+                      if (val != null) {
+                        setState(
+                          () {
+                            if (val == "Custom") {
+                              _isCustomRecurrence = true;
+                            } else {
+                              _isCustomRecurrence = false;
+                              if (val == "Daily") {
+                                _recurenceInDays = 1;
+                              } else if (val == "Weekly") {
+                                _recurenceInDays = 7;
+                              } else if (val == "Bi-weekly") {
+                                _recurenceInDays = 14;
+                              } else if (val == "Monthly") {
+                                _recurenceInDays = 30;
+                              } else if (val == "Yearly") {
+                                _recurenceInDays = 365;
+                              }
                             }
                           },
-                          decoration: const InputDecoration(
-                            labelText: "Recurrence in days",
-                            border: UnderlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            if (value == "") {
-                              setState(() {
-                                try {
-                                  _recurenceInDays = int.parse(value);
-                                }
-                                // ignore: empty_catches
-                                catch (_) {}
-                              });
-                            }
-                          },
-                        ),
-                      if (_recurring)
-                        DateTimePicker(
-                          type: DateTimePickerType.date,
-                          initialValue: DateTime.now().toString(),
-                          firstDate: DateTime(2021),
-                          lastDate: DateTime(2023),
-                          dateMask: "dd/MM/yyyy",
-                          dateLabelText: 'End Date (optional)',
-                          onSaved: (val) {
-                            _endDate = val;
-                          },
-                        ),
-                      if (!_recurring)
-                        const SizedBox(
-                          height: 108,
-                        ),
-                      const SizedBox(
-                        height: 20,
+                        );
+                      }
+                    },
+                  ),
+                const SizedBox(
+                  height: 15,
+                ),
+                if (_recurring && _isCustomRecurrence)
+                  TextFormField(
+                    initialValue: _recurenceInDays.toString(),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please add custom recurrence!';
+                      }
+                      try {
+                        _recurenceInDays = int.parse(value);
+                        return null;
+                      } catch (_) {
+                        return 'Please add custom recurrence!';
+                      }
+                    },
+                    decoration: const InputDecoration(
+                      labelText: "Recurrence in days",
+                      border: UnderlineInputBorder(),
+                    ),
+                    onChanged: (value) {
+                      if (value == "") {
+                        setState(() {
+                          try {
+                            _recurenceInDays = int.parse(value);
+                          }
+                          // ignore: empty_catches
+                          catch (_) {}
+                        });
+                      }
+                    },
+                  ),
+                if (_recurring)
+                  DateTimePicker(
+                    type: DateTimePickerType.date,
+                    initialValue: DateTime.now().toString(),
+                    firstDate: DateTime(2021),
+                    lastDate: DateTime(2023),
+                    dateMask: "dd/MM/yyyy",
+                    dateLabelText: 'End Date (optional)',
+                    onSaved: (val) {
+                      _endDate = val;
+                    },
+                  ),
+                if (!_recurring)
+                  const SizedBox(
+                    height: 108,
+                  ),
+                const SizedBox(
+                  height: 20,
+                ),
+                ButtonWrapper(
+                  width: 150,
+                  height: 50,
+                  child: TextButton(
+                    onPressed: _saveForm,
+                    style: TextButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
                       ),
-                      ButtonWrapper(
-                        width: 150,
-                        height: 50,
-                        child: TextButton(
-                          onPressed: _saveForm,
-                          style: TextButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                            ),
-                          ),
-                          child: Text(
-                            "Submit!",
-                            style: Theme.of(context).textTheme.bodyText1,
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
+                    child: Text(
+                      "Submit!",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
+          ),
+        ),
+      ),
     );
   }
 }
