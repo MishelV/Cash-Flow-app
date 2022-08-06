@@ -54,7 +54,15 @@ class RecordProvider with ChangeNotifier {
         DateTime endDate = DateTimeUtil.getRecentDate(
             DateTime(date.year, date.month + 1),
             DateTimeUtil.getDateTime(r.endDate));
-        startDate = startDate.add(recurrenceInDays);
+
+        if (r.repeatDays == 30) {
+          //handling the case of monthly recurrence.
+          startDate =
+              DateTime(startDate.year, startDate.month + 1, startDate.day);
+        } else {
+          startDate = startDate.add(recurrenceInDays);
+        }
+
         int runningIndex = 0;
         while (startDate.isBefore(endDate)) {
           runningIndex += 1;

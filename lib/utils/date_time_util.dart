@@ -30,7 +30,9 @@ class DateTimeUtil {
     final day = int.parse(date.split('-')[2]);
     final hour = int.parse(time.split(':')[0]);
     final minute = int.parse(time.split(':')[1]);
-    return DateTime(year, month, day, hour, minute);
+
+    // Adding +1 to avoid the cases for same day comparison.
+    return DateTime(year, month, day, hour, minute + 1);
   }
 
   static DateTime getDate(String date) {
@@ -40,7 +42,10 @@ class DateTimeUtil {
     final year = int.parse(date.split('-')[0]);
     final month = int.parse(date.split('-')[1]);
     final day = int.parse(date.split('-')[2]);
-    return DateTime(year, month, day);
+
+    // Adding 1 hour to avoid the cases for same day comparison.
+    const hour = 1;
+    return DateTime(year, month, day, hour);
   }
 
   static String getDateString(String s) {
