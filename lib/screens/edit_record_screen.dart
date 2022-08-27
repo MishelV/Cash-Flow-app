@@ -121,12 +121,8 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
           TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
-                _formKey.currentState!.reset();
-                setState(() {
-                  _startDate = DateTime.now().toString();
-                  _recurenceInDays = 0;
-                  _isCustomRecurrence = false;
-                });
+                Navigator.of(ctx).pop();
+                Navigator.of(ctx).pushNamed(EditRecordScreen.routeName);
               },
               child: const Text("Submit another record!")),
         ],
