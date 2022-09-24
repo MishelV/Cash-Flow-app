@@ -102,7 +102,8 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       setState(() {
         _records = records;
         _records.sort(
-          (a, b) => a.startDate.compareTo(b.startDate),
+          // Reversed
+          (a, b) => b.startDate.compareTo(a.startDate),
         );
         _isLoading = false;
       });
