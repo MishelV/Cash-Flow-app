@@ -4,6 +4,8 @@
 
 ## Instructions
 
+#### You must have [flutter](https://docs.flutter.dev/get-started/install) installed on your machine!
+
 1. Clone the repo to your local machine.
 2. Run "flutter pub get" in your terminal to fetch the flutter packages.
 3. Compile the project on your device / emulator.
