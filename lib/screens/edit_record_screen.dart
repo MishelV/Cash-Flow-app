@@ -4,10 +4,9 @@ import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../utils/date_time_util.dart';
+import '../widgets/delete_record_dialog.dart';
 
 class EditRecordScreen extends StatefulWidget {
   const EditRecordScreen({Key? key}) : super(key: key);
@@ -34,6 +33,17 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   bool _isCustomRecurrence = false;
   bool _isInit = true;
   String _screenName = "Add Record";
+  bool _editingExistingRecord = false;
+
+  void deleteRecord() {
+    deleteRecordDialog(_id, _name!, context).then(
+      (didDeleteRecord) {
+        if (didDeleteRecord) {
+          Navigator.of(context).pop();
+        }
+      },
+    );
+  }
 
   @override
   void didChangeDependencies() {
@@ -55,6 +65,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
             _description = record.description;
             _recurring = _recurenceInDays > 0;
             _isCustomRecurrence = true;
+            _editingExistingRecord = true;
           });
         }
       }
@@ -408,21 +419,44 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 const SizedBox(
                   height: 20,
                 ),
-                ButtonWrapper(
-                  width: 150,
-                  height: 50,
-                  child: TextButton(
-                    onPressed: _saveForm,
-                    style: TextButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ButtonWrapper(
+                      width: 110,
+                      height: 60,
+                      child: TextButton(
+                        onPressed: _saveForm,
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                        ),
+                        child: Text(
+                          "Submit",
+                          style: Theme.of(context).textTheme.bodyText1,
+                        ),
                       ),
                     ),
-                    child: Text(
-                      "Submit!",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
+                    if (_editingExistingRecord)
+                      ButtonWrapper(
+                        width: 110,
+                        height: 60,
+                        inverse: true,
+                        child: TextButton(
+                          onPressed: deleteRecord,
+                          style: TextButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                          ),
+                          child: Text(
+                            "Delete",
+                            style: Theme.of(context).textTheme.bodyText1,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),

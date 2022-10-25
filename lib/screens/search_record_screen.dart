@@ -40,12 +40,6 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     });
   }
 
-  void deleteRecord(Record record, BuildContext context) {
-    deleteRecordDialog(record, context).then((_) {
-      setRecords();
-    });
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -156,11 +150,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
           final record = _records.elementAt(index);
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
-            child: RecordCard(
-              record: record,
-              editRecord: editRecord,
-              deleteRecord: deleteRecord,
-            ),
+            child: RecordCard(record: record, editRecord: editRecord),
           );
         },
         itemCount: _records.length,

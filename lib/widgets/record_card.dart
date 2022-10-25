@@ -5,13 +5,8 @@ import 'package:flutter/material.dart';
 class RecordCard extends StatefulWidget {
   final Record record;
   final Function editRecord;
-  final Function deleteRecord;
 
-  const RecordCard(
-      {Key? key,
-      required this.record,
-      required this.editRecord,
-      required this.deleteRecord})
+  const RecordCard({Key? key, required this.record, required this.editRecord})
       : super(key: key);
 
   @override
@@ -98,18 +93,25 @@ class _RecordCardState extends State<RecordCard> {
                   ],
                 ),
               ),
-              leading: Text(
-                "${widget.record.value} \$",
-                style: _getTextStyle(),
-              ),
-              trailing: IconButton(
-                icon: Icon(
-                  Icons.delete,
-                  color: _getIconColor(),
+              leading: SizedBox(
+                height: 40,
+                child: Text(
+                  "${widget.record.value} \$",
+                  style: _getTextStyle(),
                 ),
-                onPressed: () {
-                  widget.deleteRecord(widget.record, context);
-                },
+              ),
+              trailing: SizedBox(
+                height: 40,
+                width: 40,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.edit_sharp,
+                    color: _getIconColor(),
+                  ),
+                  onPressed: () {
+                    widget.editRecord(widget.record, context);
+                  },
+                ),
               ),
             ),
           ),

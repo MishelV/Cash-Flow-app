@@ -5,7 +5,9 @@ import '../models/record.dart';
 import '../providers/record_provider.dart';
 import 'button_wrapper.dart';
 
-Future<void> deleteRecordDialog(Record record, BuildContext context) async {
+Future<bool> deleteRecordDialog(
+    String recordId, String recordName, BuildContext context) async {
+  bool didDeleteRecord = false;
   await showDialog(
     context: context,
     builder: (ctx) => AlertDialog(
@@ -17,7 +19,7 @@ Future<void> deleteRecordDialog(Record record, BuildContext context) async {
           children: [
             SizedBox(
               child: Text(
-                "Are you sure you wish to delete the record of '${record.name}'?",
+                "Are you sure you wish to delete the record of '$recordName'?",
                 style: Theme.of(context).textTheme.bodyText1,
               ),
             ),
@@ -49,8 +51,9 @@ Future<void> deleteRecordDialog(Record record, BuildContext context) async {
           child: TextButton(
             onPressed: () {
               Provider.of<RecordProvider>(context, listen: false)
-                  .removeRecordById(record.id);
+                  .removeRecordById(recordId);
               Navigator.of(ctx).pop();
+              didDeleteRecord = true;
             },
             style: TextButton.styleFrom(
               shape: RoundedRectangleBorder(
@@ -66,4 +69,5 @@ Future<void> deleteRecordDialog(Record record, BuildContext context) async {
       ],
     ),
   );
+  return Future.value(didDeleteRecord);
 }
