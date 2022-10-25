@@ -12,7 +12,7 @@ const colorScheme = ColorScheme(
   error: Color.fromARGB(206, 255, 62, 48),
   onError: Colors.black,
   surface: Color(0xFFB6D96A),
-  onSurface: Color(0xFF9CD918),
+  onSurface: Color(0xFF53A62D),
   inversePrimary: Color.fromARGB(255, 170, 65, 63),
   // tertiary: Color.fromARGB(185, 177, 50, 48),
 );
