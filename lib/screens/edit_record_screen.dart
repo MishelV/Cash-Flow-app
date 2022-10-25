@@ -147,7 +147,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 TextFormField(
                   initialValue: _name,
@@ -295,26 +295,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                 ),
                 const SizedBox(
                   height: 5,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "Is the transaction recurring?",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    Checkbox(
-                      checkColor: Theme.of(context).colorScheme.onPrimary,
-                      activeColor: Theme.of(context).colorScheme.primary,
-                      value: _recurring,
-                      onChanged: (val) {
-                        setState(
-                          () {
-                            _recurring = val!;
-                          },
-                        );
-                      },
-                    ),
-                  ],
                 ),
                 if (_recurring)
                   DropdownButtonFormField<String>(

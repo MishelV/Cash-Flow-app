@@ -98,23 +98,13 @@ class _RecordCardState extends State<RecordCard> {
                   ],
                 ),
               ),
-              leading: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "${widget.record.value} \$",
-                    style: _getTextStyle(),
-                  ),
-                  if (widget.record.repeatDays != 0)
-                    Icon(
-                      Icons.repeat,
-                      color: _getIconColor(),
-                    ),
-                ],
+              leading: Text(
+                "${widget.record.value} \$",
+                style: _getTextStyle(),
               ),
               trailing: IconButton(
                 icon: Icon(
-                  Icons.delete_forever,
+                  Icons.delete,
                   color: _getIconColor(),
                 ),
                 onPressed: () {
