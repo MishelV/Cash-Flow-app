@@ -102,7 +102,7 @@ class _RecordCardState extends State<RecordCard> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "${widget.record.value} ₪",
+                    "${widget.record.value} \$",
                     style: _getTextStyle(),
                   ),
                   if (widget.record.repeatDays != 0)

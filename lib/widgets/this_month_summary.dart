@@ -85,7 +85,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
               children: [
                 FittedBox(
                   child: Text(
-                    "${DateTimeUtil.months[DateTime.now().month - 1]}'s Cash Flow: ${thisMonthSummary.cashFlow} ₪",
+                    "${DateTimeUtil.months[DateTime.now().month - 1]}'s Cash Flow: ${thisMonthSummary.cashFlow} \$",
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
@@ -112,7 +112,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
-                            "${-1 * thisMonthSummary.expenseSum} ₪",
+                            "${-1 * thisMonthSummary.expenseSum} \$",
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
@@ -124,7 +124,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
-                            "${thisMonthSummary.incomeSum} ₪",
+                            "${thisMonthSummary.incomeSum} \$",
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],

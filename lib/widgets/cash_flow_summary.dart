@@ -24,7 +24,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Cash Flow: ${cashFlow.cashFlow} ₪",
+              "Cash Flow: ${cashFlow.cashFlow} \$",
               style: Theme.of(context).textTheme.headline6,
             ),
             Row(
@@ -35,7 +35,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Expenses: ${cashFlow.expenseSum} ₪",
+                    "Expenses: ${cashFlow.expenseSum} \$",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -44,7 +44,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Income: ${cashFlow.incomeSum} ₪",
+                    "Income: ${cashFlow.incomeSum} \$",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
