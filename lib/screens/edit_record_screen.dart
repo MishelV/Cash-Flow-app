@@ -158,7 +158,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 TextFormField(
                   initialValue: _name,
@@ -412,12 +412,8 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                       _endDate = val;
                     },
                   ),
-                if (!_recurring)
-                  const SizedBox(
-                    height: 108,
-                  ),
                 const SizedBox(
-                  height: 20,
+                  height: 70,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
