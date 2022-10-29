@@ -155,7 +155,7 @@ class RecordProvider with ChangeNotifier {
 
   /// Returns a list of month report cards, ordered from earliest month to oldest.
   /// The "from" date's month won't be included in the list!
-  List<MonthReportCard> getMonthReportList(
+  List<MonthReportModel> getMonthReportList(
       {required DateTime from, required int numberOfMonths}) {
     int fromMonth = from.month - 1;
     int fromYear = from.year;
@@ -165,7 +165,7 @@ class RecordProvider with ChangeNotifier {
       fromYear -= 1;
     }
 
-    List<MonthReportCard> list = [];
+    List<MonthReportModel> list = [];
     int currentMonth = 0;
     while (currentMonth < numberOfMonths) {
       int month = fromMonth - currentMonth;
@@ -176,7 +176,7 @@ class RecordProvider with ChangeNotifier {
       }
       DateTime monthReportDate = DateTime(year, month);
       list.add(
-          MonthReportCard(monthReportDate, getMonthSummary(monthReportDate)));
+          MonthReportModel(monthReportDate, getMonthSummary(monthReportDate)));
 
       currentMonth += 1;
     }

@@ -1,7 +1,7 @@
 import 'cash_flow_summary.dart';
 
-class MonthReportCard {
+class MonthReportModel {
   DateTime date;
   CashFlowSummary summary;
-  MonthReportCard(this.date, this.summary);
+  MonthReportModel(this.date, this.summary);
 }
