@@ -1,12 +1,9 @@
-import 'package:cash_flow_app/models/cash_flow_summary.dart';
-import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/month_report_card.dart';
-import '../models/search_type.dart';
 import '../providers/record_provider.dart';
-import 'search_record_screen.dart';
+import '../widgets/month_report_widget.dart';
 
 class MonthlyReportScreen extends StatefulWidget {
   const MonthlyReportScreen({Key? key}) : super(key: key);
@@ -49,69 +46,32 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
             "Previous Months",
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          onPressed: add4Months,
+          child: Icon(
+            Icons.arrow_downward,
+            color: Theme.of(context).colorScheme.background,
+          ),
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        ),
         body: Column(
           children: [
-            SizedBox(
-              height: 100,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  TextButton(onPressed: null, child: Text("Choose month")),
-                  TextButton(onPressed: null, child: Text("Choose year"))
-                ],
-              ),
-            ),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                      maxCrossAxisExtent: 200,
-                      childAspectRatio: 8 / 9,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                    ),
-                    itemCount: orderedMonthReportCards.length,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return MonthReportCard(
-                          report: orderedMonthReportCards[index]);
-                    }),
-              ),
+              child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 200,
+                    childAspectRatio: 8 / 8,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: orderedMonthReportCards.length,
+                  itemBuilder: (BuildContext ctx, index) {
+                    return MonthReportCard(
+                        report: orderedMonthReportCards[index]);
+                  }),
             ),
-            SizedBox(
-                height: 60,
-                child: TextButton(
-                    onPressed: add4Months, child: Text("Load more!")))
           ],
         ));
-  }
-}
-
-class MonthReportCard extends StatelessWidget {
-  MonthReportModel report;
-
-  MonthReportCard({Key? key, required this.report}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ButtonWrapper(
-        inverse: report.summary.cashFlow < 0,
-        child: TextButton(
-          onPressed: () {
-            Navigator.of(context).pushNamed(
-              SearchRecordScreen.routeName,
-              arguments: [
-                SearchType.monthSummary,
-                report.date,
-              ],
-            );
-          },
-          child: Text(report.date.toString()),
-        ),
-      ),
-    );
   }
 }
