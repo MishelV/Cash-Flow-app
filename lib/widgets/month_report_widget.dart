@@ -74,15 +74,15 @@ Expense: ${report.summary!.expenseSum}
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              titleText(context),
+              Flexible(child: titleText(context)),
               SizedBox(
                 height: 5,
               ),
-              cashFlowText(context),
+              Flexible(child: cashFlowText(context)),
               SizedBox(
                 height: 5,
               ),
-              cashFlowDetailsText(context)
+              Flexible(child: cashFlowDetailsText(context))
             ],
           ),
         ),

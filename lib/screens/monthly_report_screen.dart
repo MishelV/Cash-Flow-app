@@ -77,19 +77,22 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
             : Column(
                 children: [
                   Expanded(
-                    child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: 8 / 8,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: orderedMonthReportCards.length,
-                        itemBuilder: (BuildContext ctx, index) {
-                          return MonthReportCard(
-                              report: orderedMonthReportCards[index]);
-                        }),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                            maxCrossAxisExtent: 200,
+                            childAspectRatio: 8 / 8,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemCount: orderedMonthReportCards.length,
+                          itemBuilder: (BuildContext ctx, index) {
+                            return MonthReportCard(
+                                report: orderedMonthReportCards[index]);
+                          }),
+                    ),
                   ),
                 ],
               ));
