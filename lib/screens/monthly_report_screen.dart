@@ -17,24 +17,41 @@ class MonthlyReportScreen extends StatefulWidget {
 class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
   List<MonthReportModel> orderedMonthReportCards = [];
   var _isInit = true;
+  var _isLoading = false;
+
+  void setReportCard() async {
+    orderedMonthReportCards =
+        await Provider.of<RecordProvider>(context, listen: false)
+            .getMonthReportList(from: DateTime.now(), numberOfMonths: 6)
+            .whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+    });
+  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (_isInit) {
-      orderedMonthReportCards =
-          Provider.of<RecordProvider>(context, listen: false)
-              .getMonthReportList(from: DateTime.now(), numberOfMonths: 6);
+      _isLoading = true;
       _isInit = false;
+      setReportCard();
     }
   }
 
-  void add4Months() {
+  void add4Months() async {
     setState(() {
-      orderedMonthReportCards.addAll(
-          Provider.of<RecordProvider>(context, listen: false)
-              .getMonthReportList(
-                  from: orderedMonthReportCards.last.date, numberOfMonths: 4));
+      _isLoading = true;
+    });
+    Provider.of<RecordProvider>(context, listen: false)
+        .getMonthReportList(
+            from: orderedMonthReportCards.last.date, numberOfMonths: 4)
+        .then((newReports) {
+      setState(() {
+        _isLoading = false;
+        orderedMonthReportCards.addAll(newReports);
+      });
     });
   }
 
@@ -55,23 +72,26 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),
-        body: Column(
-          children: [
-            Expanded(
-              child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: 8 / 8,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
+        body: _isLoading
+            ? CircularProgressIndicator()
+            : Column(
+                children: [
+                  Expanded(
+                    child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: 8 / 8,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: orderedMonthReportCards.length,
+                        itemBuilder: (BuildContext ctx, index) {
+                          return MonthReportCard(
+                              report: orderedMonthReportCards[index]);
+                        }),
                   ),
-                  itemCount: orderedMonthReportCards.length,
-                  itemBuilder: (BuildContext ctx, index) {
-                    return MonthReportCard(
-                        report: orderedMonthReportCards[index]);
-                  }),
-            ),
-          ],
-        ));
+                ],
+              ));
   }
 }

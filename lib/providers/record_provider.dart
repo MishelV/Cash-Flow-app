@@ -155,7 +155,7 @@ class RecordProvider with ChangeNotifier {
 
   /// Returns a list of month report cards, ordered from earliest month to oldest.
   /// The "from" date's month won't be included in the list!
-  List<MonthReportModel> getMonthReportList(
+  Future<List<MonthReportModel>> getMonthReportList(
       {required DateTime from, required int numberOfMonths}) {
     int fromMonth = from.month - 1;
     int fromYear = from.year;
@@ -166,22 +166,23 @@ class RecordProvider with ChangeNotifier {
     }
 
     List<MonthReportModel> list = [];
-    int currentMonth = 0;
-    while (currentMonth < numberOfMonths) {
-      int month = fromMonth - currentMonth;
-      int year = fromYear;
-      if (month < 1) {
-        year -= 1;
-        month += 12;
+    return Future.value(list).then((_) {
+      int currentMonth = 0;
+      while (currentMonth < numberOfMonths) {
+        int month = fromMonth - currentMonth;
+        int year = fromYear;
+        if (month < 1) {
+          year -= 1;
+          month += 12;
+        }
+        DateTime monthReportDate = DateTime(year, month);
+        list.add(MonthReportModel(
+            monthReportDate, getMonthSummary(monthReportDate)));
+
+        currentMonth += 1;
       }
-      DateTime monthReportDate = DateTime(year, month);
-      list.add(
-          MonthReportModel(monthReportDate, getMonthSummary(monthReportDate)));
-
-      currentMonth += 1;
-    }
-
-    return list;
+      return list;
+    });
   }
 
   void removeRecordById(String id) {
