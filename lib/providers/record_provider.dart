@@ -148,9 +148,9 @@ class RecordProvider with ChangeNotifier {
         incomeSum: income, cashFlow: income + expense, expenseSum: expense);
   }
 
-  CashFlowSummary getMonthSummary(DateTime date) {
+  CashFlowSummary? getMonthSummary(DateTime date) {
     List<Record> monthRecords = getRecordsByYearMonth(date);
-    return getCashFlowSummary(monthRecords);
+    return monthRecords.isEmpty ? null : getCashFlowSummary(monthRecords);
   }
 
   /// Returns a list of month report cards, ordered from earliest month to oldest.

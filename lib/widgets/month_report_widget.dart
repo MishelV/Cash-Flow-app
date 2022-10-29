@@ -10,20 +10,48 @@ class MonthReportCard extends StatelessWidget {
 
   MonthReportCard({Key? key, required this.report}) : super(key: key);
 
-  String get title {
-    return "${report.date.month} / ${report.date.year}";
+  Widget titleText(BuildContext context) {
+    final title = "${report.date.month} / ${report.date.year}";
+    return Text(title,
+        style: Theme.of(context)
+            .textTheme
+            .headline6
+            ?.copyWith(color: Colors.black, fontSize: 20));
   }
 
-  String get cashFlow {
-    final posiviteSign = report.summary.cashFlow > 0 ? "+" : "";
-    return "$posiviteSign${report.summary.cashFlow} \$";
+  Widget NoRecrdsText(BuildContext context) {
+    return Text("No records!", style: Theme.of(context).textTheme.headline3);
   }
 
-  String get cashFlowDetails {
-    return """
-Income: ${report.summary.incomeSum}
-Expense: ${report.summary.expenseSum}
+  Widget cashFlowText(BuildContext context) {
+    if (report.summary == null) return NoRecrdsText(context);
+
+    final posiviteSign = report.summary!.cashFlow > 0 ? "+" : "";
+    final cashFlowText = "$posiviteSign${report.summary!.cashFlow} \$";
+
+    return Text(
+      cashFlowText,
+      style: Theme.of(context).textTheme.headline4?.copyWith(
+            color: report.summary!.cashFlow < 0
+                ? Theme.of(context).colorScheme.inversePrimary
+                : report.summary!.cashFlow > 0
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
+          ),
+    );
+  }
+
+  Widget cashFlowDetailsText(BuildContext context) {
+    final cashFlowDetails = report.summary == null
+        ? ""
+        : """
+Income: ${report.summary!.incomeSum}
+Expense: ${report.summary!.expenseSum}
 """;
+    return Text(
+      cashFlowDetails,
+      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 13),
+    );
   }
 
   @override
@@ -31,7 +59,7 @@ Expense: ${report.summary.expenseSum}
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ButtonWrapper(
-        inverse: report.summary.cashFlow < 0,
+        inverse: report.summary != null && report.summary!.cashFlow < 0,
         child: TextButton(
           onPressed: () {
             Navigator.of(context).pushNamed(
@@ -47,36 +75,15 @@ Expense: ${report.summary.expenseSum}
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6
-                      ?.copyWith(color: Colors.black, fontSize: 20),
-                ),
+                titleText(context),
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  cashFlow,
-                  style: Theme.of(context).textTheme.headline4?.copyWith(
-                        color: report.summary.cashFlow < 0
-                            ? Theme.of(context).colorScheme.inversePrimary
-                            : report.summary.cashFlow > 0
-                                ? Theme.of(context).colorScheme.primary
-                                : null,
-                      ),
-                ),
+                cashFlowText(context),
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  cashFlowDetails,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1
-                      ?.copyWith(fontSize: 13),
-                )
+                cashFlowDetailsText(context)
               ],
             ),
           ),

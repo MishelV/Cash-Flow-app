@@ -51,6 +51,13 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
 
     final thisMonthSummary =
         Provider.of<RecordProvider>(context).getMonthSummary(DateTime.now());
+
+    if (thisMonthSummary == null) {
+      return const Center(
+        child: Text("No records yet!"),
+      );
+    }
+
     final spentPercent = thisMonthSummary.incomeSum == 0
         ? 1.0
         : min(
