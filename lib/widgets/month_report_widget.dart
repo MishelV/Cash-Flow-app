@@ -70,22 +70,20 @@ Expense: ${report.summary!.expenseSum}
               ],
             );
           },
-          child: Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                titleText(context),
-                SizedBox(
-                  height: 5,
-                ),
-                cashFlowText(context),
-                SizedBox(
-                  height: 5,
-                ),
-                cashFlowDetailsText(context)
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              titleText(context),
+              SizedBox(
+                height: 5,
+              ),
+              cashFlowText(context),
+              SizedBox(
+                height: 5,
+              ),
+              cashFlowDetailsText(context)
+            ],
           ),
         ),
       ),

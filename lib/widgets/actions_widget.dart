@@ -55,7 +55,7 @@ class ActionsWidget extends StatelessWidget {
             ),
             ActionButton(
               icon: const Icon(Icons.summarize_outlined),
-              buttonName: "Monthly Summary",
+              buttonName: "Previous Months",
               route: MonthlyReportScreen.routeName,
               beforeAction: beforeAction,
               afterAction: afterAction,
