@@ -1,6 +1,6 @@
 import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
-import 'package:cash_flow_app/screens/month_summary_screen.dart';
+import 'package:cash_flow_app/screens/monthly_report_screen.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -56,7 +56,7 @@ class ActionsWidget extends StatelessWidget {
             ActionButton(
               icon: const Icon(Icons.summarize_outlined),
               buttonName: "Monthly Summary",
-              route: MonthlySummaryScreen.routeName,
+              route: MonthlyReportScreen.routeName,
               beforeAction: beforeAction,
               afterAction: afterAction,
             ),

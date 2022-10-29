@@ -2,7 +2,7 @@ import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
 import 'package:cash_flow_app/screens/home_screen.dart';
-import 'package:cash_flow_app/screens/month_summary_screen.dart';
+import 'package:cash_flow_app/screens/monthly_report_screen.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:cash_flow_app/themes.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +44,7 @@ class MyApp extends StatelessWidget {
         HomeScreen.routeName: (context) => const HomeScreen(),
         EditRecordScreen.routeName: (context) => const EditRecordScreen(),
         SearchRecordScreen.routeName: (context) => const SearchRecordScreen(),
-        MonthlySummaryScreen.routeName: (context) =>
-            const MonthlySummaryScreen(),
+        MonthlyReportScreen.routeName: (context) => const MonthlyReportScreen(),
       },
     );
   }
