@@ -68,8 +68,9 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
           onPressed: () {
             Navigator.of(context).pushNamed(
               SearchRecordScreen.routeName,
-              arguments: const [
-                SearchType.thisMonthSummary,
+              arguments: [
+                SearchType.monthSummary,
+                DateTime.now(),
               ],
             );
           },
@@ -85,7 +86,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
               children: [
                 FittedBox(
                   child: Text(
-                    "${DateTimeUtil.months[DateTime.now().month - 1]}'s Cash Flow: ${thisMonthSummary.cashFlow} \$",
+                    "${DateTimeUtil.months[DateTime.now().month]}'s Cash Flow: ${thisMonthSummary.cashFlow} \$",
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),

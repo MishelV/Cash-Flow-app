@@ -49,10 +49,13 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       if (arguments != null && arguments.isNotEmpty) {
         final type = arguments[0] as SearchType;
         switch (type) {
-          case SearchType.thisMonthSummary:
+          case SearchType.monthSummary:
             setState(() {
-              _startDate = DateTime(DateTime.now().year, DateTime.now().month);
-              _endDate = _startDate.add(const Duration(days: 30));
+              final date = arguments[1] as DateTime;
+              _startDate = DateTime(date.year, date.month);
+              _endDate = date.month == 12
+                  ? DateTime(date.year + 1, 1)
+                  : DateTime(date.year, date.month + 1);
               _screenName = "This Month Summary";
             });
             break;

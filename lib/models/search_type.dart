@@ -1,5 +1,5 @@
 enum SearchType {
-  thisMonthSummary,
+  monthSummary,
   upcomingExpenses,
   recordLookup,
 }

@@ -1,21 +1,8 @@
 import 'package:flutter/material.dart';
 
-class MonthListTile extends StatelessWidget {
-  static const months = [
-    'January',
-    'Fabruary',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December'
-  ];
+import '../utils/date_time_util.dart';
 
+class MonthListTile extends StatelessWidget {
   final int year;
 
   const MonthListTile({
@@ -50,7 +37,7 @@ class MonthListTile extends StatelessWidget {
                     const String sign = cashFlow >= 0 ? "" : "-";
                     return MonthTileWidget(
                         cashFlow: cashFlow,
-                        month: months[monthIndex],
+                        month: DateTimeUtil.months[monthIndex],
                         sign: sign);
                   })),
             ),
