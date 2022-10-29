@@ -1,5 +1,6 @@
 import 'package:cash_flow_app/helpers/db_helper.dart';
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
+import 'package:cash_flow_app/models/month_report_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -150,6 +151,37 @@ class RecordProvider with ChangeNotifier {
   CashFlowSummary getMonthSummary(DateTime date) {
     List<Record> monthRecords = getRecordsByYearMonth(date);
     return getCashFlowSummary(monthRecords);
+  }
+
+  /// Returns a list of month report cards, ordered from earliest month to oldest.
+  /// The "from" date's month won't be included in the list!
+  List<MonthReportCard> getMonthReportList(
+      {required DateTime from, required int numberOfMonths}) {
+    int fromMonth = from.month - 1;
+    int fromYear = from.year;
+
+    if (fromMonth < 1) {
+      fromMonth = 12;
+      fromYear -= 1;
+    }
+
+    List<MonthReportCard> list = [];
+    int currentMonth = 0;
+    while (currentMonth < numberOfMonths) {
+      int month = fromMonth - currentMonth;
+      int year = fromYear;
+      if (month < 1) {
+        year -= 1;
+        month += 12;
+      }
+      DateTime monthReportDate = DateTime(year, month);
+      list.add(
+          MonthReportCard(monthReportDate, getMonthSummary(monthReportDate)));
+
+      currentMonth += 1;
+    }
+
+    return list;
   }
 
   void removeRecordById(String id) {
