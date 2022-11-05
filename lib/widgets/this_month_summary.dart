@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:cash_flow_app/utils/date_time_util.dart';
@@ -50,13 +51,8 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
     }
 
     final thisMonthSummary =
-        Provider.of<RecordProvider>(context).getMonthSummary(DateTime.now());
-
-    if (thisMonthSummary == null) {
-      return const Center(
-        child: Text("No records yet!"),
-      );
-    }
+        Provider.of<RecordProvider>(context).getMonthSummary(DateTime.now()) ??
+            CashFlowSummary(incomeSum: 0, cashFlow: 0, expenseSum: 0);
 
     final spentPercent = thisMonthSummary.incomeSum == 0
         ? 1.0
