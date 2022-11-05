@@ -40,4 +40,18 @@ class Record {
     this.endDate = "",
     this.repeatDays = -1,
   });
+
+  // Convert a Record into a Map. The keys must correspond to the names of the
+  // columns in the database.
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'value': value,
+      'startDate': startDate,
+      'endDate': endDate,
+      'repeatDays': repeatDays,
+    };
+  }
 }

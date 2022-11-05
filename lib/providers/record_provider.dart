@@ -1,4 +1,5 @@
 import 'package:cash_flow_app/helpers/hive_db_helper.dart';
+import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/models/month_report_card.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,7 @@ class RecordProvider with ChangeNotifier {
   List<Record> _records = [];
 
   Future<void> fetchAndSetRecords() async {
-    _records = await HiveDBHelper().getRecords();
+    _records = await SQFLiteDBHelper().getRecords();
     notifyListeners();
   }
 
@@ -21,7 +22,7 @@ class RecordProvider with ChangeNotifier {
 
   void addRecord(Record record) {
     _records.add(record);
-    HiveDBHelper().addRecord(record);
+    SQFLiteDBHelper().insertRecord(record);
     notifyListeners();
   }
 
@@ -189,15 +190,21 @@ class RecordProvider with ChangeNotifier {
     if (id.isEmpty) return;
     Record? record = getRecordById(id);
     if (record != null) {
-      HiveDBHelper().removeRecord(record);
+      SQFLiteDBHelper().deleteRecord(record.id);
       _records.remove(record);
       notifyListeners();
     }
   }
 
-  void clearRecords() {
-    _records.clear();
-    HiveDBHelper().clearRecords();
-    notifyListeners();
-  }
+  // void migrateDataToSQFLite() {
+  //   for (final record in _records) {
+  //     SQFLiteDBHelper().insertRecord(record);
+  //   }
+  // }
+
+  // void clearRecords() {
+  //   _records.clear();
+  //   HiveDBHelper().clearRecords();
+  //   notifyListeners();
+  // }
 }

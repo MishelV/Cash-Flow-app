@@ -1,5 +1,4 @@
 import 'package:cash_flow_app/widgets/actions_widget.dart';
-import 'package:cash_flow_app/widgets/hello_widget.dart';
 import 'package:cash_flow_app/widgets/rotating_app_logo.dart';
 import 'package:cash_flow_app/widgets/this_month_summary.dart';
 import 'package:flutter/material.dart';
