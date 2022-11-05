@@ -19,10 +19,10 @@ const colorScheme = ColorScheme(
 
 final elevatedButtonTheme = ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(
-    shape: const CircleBorder(),
+    shape: CircleBorder(),
     padding: const EdgeInsets.all(20),
-    primary: colorScheme.surface,
-    onPrimary: Colors.black,
+    backgroundColor: colorScheme.surface,
+    foregroundColor: Colors.black,
     shadowColor: colorScheme.secondary,
   ),
 );

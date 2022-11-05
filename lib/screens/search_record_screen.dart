@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 
 import '../models/search_type.dart';
 import '../widgets/cash_flow_summary.dart';
-import '../widgets/delete_record_dialog.dart';
 
 class SearchRecordScreen extends StatefulWidget {
   const SearchRecordScreen({Key? key}) : super(key: key);
