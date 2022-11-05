@@ -120,7 +120,8 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: const Text("Hurray!"),
-        content: const Text("Your record was submitted."),
+        content: Text(
+            "Your record was ${_editingExistingRecord ? "updated" : "submitted"}."),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
@@ -429,7 +430,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                           ),
                         ),
                         child: Text(
-                          "Submit",
+                          _editingExistingRecord ? "Update" : "Submit",
                           style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
