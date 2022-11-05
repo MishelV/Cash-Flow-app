@@ -1,4 +1,4 @@
-import 'package:cash_flow_app/helpers/db_helper.dart';
+import 'package:cash_flow_app/helpers/hive_db_helper.dart';
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/models/month_report_card.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +11,7 @@ class RecordProvider with ChangeNotifier {
   List<Record> _records = [];
 
   Future<void> fetchAndSetRecords() async {
-    _records = await DBHelper().getRecords();
+    _records = await HiveDBHelper().getRecords();
     notifyListeners();
   }
 
@@ -21,7 +21,7 @@ class RecordProvider with ChangeNotifier {
 
   void addRecord(Record record) {
     _records.add(record);
-    DBHelper().addRecord(record);
+    HiveDBHelper().addRecord(record);
     notifyListeners();
   }
 
@@ -189,7 +189,7 @@ class RecordProvider with ChangeNotifier {
     if (id.isEmpty) return;
     Record? record = getRecordById(id);
     if (record != null) {
-      DBHelper().removeRecord(record);
+      HiveDBHelper().removeRecord(record);
       _records.remove(record);
       notifyListeners();
     }
@@ -197,7 +197,7 @@ class RecordProvider with ChangeNotifier {
 
   void clearRecords() {
     _records.clear();
-    DBHelper().clearRecords();
+    HiveDBHelper().clearRecords();
     notifyListeners();
   }
 }

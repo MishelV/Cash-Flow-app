@@ -1,7 +1,7 @@
 import 'package:cash_flow_app/models/record.dart';
 import 'package:hive/hive.dart';
 
-class DBHelper {
+class HiveDBHelper {
   void initHive() {}
 
   // Records
