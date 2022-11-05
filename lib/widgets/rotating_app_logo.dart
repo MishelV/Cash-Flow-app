@@ -5,15 +5,24 @@ class RotatingAppLogo extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  late AnimationController _controller;
+  AnimationController? _controller;
+
+  AnimationController presistentAnimator(TickerProvider vsync) {
+    if (_controller != null) return _controller!;
+    _controller = AnimationController(
+      duration: const Duration(seconds: 600),
+      vsync: vsync,
+    );
+    return _controller!;
+  }
 
   void stopAnimation() {
-    _controller.stop();
+    _controller?.stop();
   }
 
   void continueAnimation() {
-    _controller.reset();
-    _controller.forward();
+    _controller?.reset();
+    _controller?.forward();
   }
 
   @override
@@ -22,25 +31,23 @@ class RotatingAppLogo extends StatefulWidget {
 
 class _RotatingAppLogoState extends State<RotatingAppLogo>
     with SingleTickerProviderStateMixin {
-  @override
-  void initState() {
-    widget._controller = AnimationController(
-      duration: const Duration(seconds: 600),
-      vsync: this,
-    );
-    super.initState();
+  AnimationController? currentAnimator;
+
+  AnimationController get animator {
+    currentAnimator ??= widget.presistentAnimator(this);
+    return currentAnimator!;
   }
 
   @override
   void didChangeDependencies() {
-    widget._controller.reset();
-    widget._controller.forward();
+    animator.reset();
+    animator.forward();
     super.didChangeDependencies();
   }
 
   @override
   void dispose() {
-    widget._controller.dispose();
+    animator.dispose();
     super.dispose();
   }
 
@@ -48,14 +55,14 @@ class _RotatingAppLogoState extends State<RotatingAppLogo>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (widget._controller.isAnimating) {
-          widget._controller.stop();
+        if (widget._controller!.isAnimating) {
+          widget._controller!.stop();
         } else {
-          widget._controller.forward();
+          widget._controller!.forward();
         }
       },
       child: RotationTransition(
-        turns: Tween(begin: 0.0, end: 40.0).animate(widget._controller),
+        turns: Tween(begin: 0.0, end: 40.0).animate(widget._controller!),
         child: Image.asset(
           'assets/images/finance.png',
         ),
