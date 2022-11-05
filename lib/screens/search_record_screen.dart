@@ -56,7 +56,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
               _endDate = date.month == 12
                   ? DateTime(date.year + 1, 1)
                   : DateTime(date.year, date.month + 1);
-              _screenName = "This Month Summary";
+              _screenName = "Records Summary";
             });
             break;
           case SearchType.upcomingExpenses:
@@ -107,6 +107,10 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     });
   }
 
+  void navigateToAddRecord() {
+    Navigator.of(context).pushNamed(EditRecordScreen.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     final cashFlow = Provider.of<RecordProvider>(context, listen: false)
@@ -115,6 +119,10 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(_screenName),
+        actions: [
+          IconButton(
+              onPressed: navigateToAddRecord, icon: const Icon(Icons.add))
+        ],
       ),
       body: _isLoading
           ? const Center(
