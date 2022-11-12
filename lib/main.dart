@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
         cardTheme: cardTheme,
         textTheme: textTheme,
       ),
-      home: const HomeScreen(),
+      home: HomeScreen(),
       routes: {
-        HomeScreen.routeName: (context) => const HomeScreen(),
+        HomeScreen.routeName: (context) => HomeScreen(),
         EditRecordScreen.routeName: (context) => const EditRecordScreen(),
         SearchRecordScreen.routeName: (context) => const SearchRecordScreen(),
         MonthlyReportScreen.routeName: (context) => const MonthlyReportScreen(),

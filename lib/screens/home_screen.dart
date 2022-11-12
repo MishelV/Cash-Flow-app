@@ -3,8 +3,12 @@ import 'package:cash_flow_app/widgets/rotating_app_logo.dart';
 import 'package:cash_flow_app/widgets/this_month_summary.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/app_side_drawer.dart';
+
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({Key? key}) : super(key: key);
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   static const routeName = '/home_screen';
 
@@ -12,15 +16,44 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final rotatingLogo = RotatingAppLogo();
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      endDrawer: const AppSideDrawer(),
       body: Column(
         children: [
           const SizedBox(
-            height: 15,
+            height: 2,
           ),
-          SizedBox(
-            height: 220,
-            child: rotatingLogo,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                width: 60,
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: 210,
+                  width: 210,
+                  child: rotatingLogo,
+                ),
+              ),
+              Container(
+                width: 40,
+                height: 40,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.black12,
+                ),
+                child: IconButton(
+                  onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                  icon: const Icon(Icons.settings),
+                ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+            ],
           ),
           Text(
             "Cash Flow.",
