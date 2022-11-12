@@ -29,14 +29,7 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                width: 60,
-              ),
-              Expanded(
-                child: SizedBox(
-                  height: 210,
-                  width: 210,
-                  child: rotatingLogo,
-                ),
+                width: 20,
               ),
               Container(
                 width: 40,
@@ -50,8 +43,15 @@ class HomeScreen extends StatelessWidget {
                   icon: const Icon(Icons.settings),
                 ),
               ),
+              Expanded(
+                child: SizedBox(
+                  height: 210,
+                  width: 210,
+                  child: rotatingLogo,
+                ),
+              ),
               const SizedBox(
-                width: 20,
+                width: 60,
               ),
             ],
           ),
