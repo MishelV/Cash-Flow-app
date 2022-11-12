@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      endDrawer: const AppSideDrawer(),
+      drawer: const AppSideDrawer(),
       body: Column(
         children: [
           const SizedBox(
@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.black12,
                 ),
                 child: IconButton(
-                  onPressed: () => _scaffoldKey.currentState?.openEndDrawer(),
+                  onPressed: () => _scaffoldKey.currentState?.openDrawer(),
                   icon: const Icon(Icons.settings),
                 ),
               ),
