@@ -117,7 +117,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text(_screenName),
+        title: FittedBox(child: Text(_screenName)),
         actions: [
           IconButton(
               onPressed: navigateToAddRecord, icon: const Icon(Icons.add))

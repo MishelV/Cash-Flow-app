@@ -59,8 +59,10 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Previous Months",
+          title: const FittedBox(
+            child: Text(
+              "Previous Months",
+            ),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,

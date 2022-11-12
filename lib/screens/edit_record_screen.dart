@@ -146,8 +146,10 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          _screenName,
+        title: FittedBox(
+          child: Text(
+            _screenName,
+          ),
         ),
         actions: [
           IconButton(onPressed: _saveForm, icon: const Icon(Icons.save_alt))
