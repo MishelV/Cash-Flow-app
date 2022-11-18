@@ -59,6 +59,6 @@ void openGitHubProject() async {
   if (await canLaunchUrl(_url)) {
     await launchUrl(_url, mode: LaunchMode.externalApplication);
   } else {
-    print("pp AAAAAAA");
+    throw "Could not launch $url";
   }
 }
