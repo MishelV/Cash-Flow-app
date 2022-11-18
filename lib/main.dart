@@ -6,10 +6,12 @@ import 'package:cash_flow_app/screens/monthly_report_screen.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:cash_flow_app/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => RecordProvider()),
