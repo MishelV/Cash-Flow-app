@@ -5,17 +5,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesProvider with ChangeNotifier {
   static const sharedPreferencesCurrencyString = "currency";
 
-  SharedPreferencesModel _model = SharedPreferencesModel(Currency.dollar);
+  SharedPreferencesModel? _model;
 
   SharedPreferences? preferences;
 
   Future<void> fetchAndSetPreferences() async {
+    if (_model != null) return;
+
     preferences = await SharedPreferences.getInstance();
     final Currency? currency = stringToCurrency(
         preferences?.getString(sharedPreferencesCurrencyString));
-    if (currency != null) {
-      _model = SharedPreferencesModel(currency);
-    }
+    _model = SharedPreferencesModel(currency ?? Currency.dollar);
     notifyListeners();
   }
 
@@ -24,7 +24,7 @@ class SharedPreferencesProvider with ChangeNotifier {
   }
 
   void setCurrency(Currency c) {
-    _model.currency = c;
+    _model?.currency = c;
     final String? currencyString = currencyToString(c);
     if (currencyString != null) {
       preferences?.setString(sharedPreferencesCurrencyString, currencyString);
@@ -32,7 +32,7 @@ class SharedPreferencesProvider with ChangeNotifier {
     }
   }
 
-  Currency getCurrency() {
-    return _model.currency;
+  Currency? getCurrency() {
+    return _model?.currency;
   }
 }
