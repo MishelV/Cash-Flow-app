@@ -1,4 +1,5 @@
 import 'package:cash_flow_app/providers/record_provider.dart';
+import 'package:cash_flow_app/providers/shared_preferences_provider.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
 import 'package:cash_flow_app/screens/home_screen.dart';
 import 'package:cash_flow_app/screens/monthly_report_screen.dart';
@@ -12,6 +13,7 @@ void main() async {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => RecordProvider()),
+      ChangeNotifierProvider(create: (_) => SharedPreferencesProvider()),
     ],
     child: const MyApp(),
   ));
