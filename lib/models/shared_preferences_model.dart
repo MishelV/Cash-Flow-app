@@ -6,9 +6,9 @@ class SharedPreferencesModel {
 
 enum Currency { shekel, dollar, euro }
 
-const String shekelString = "Shekel";
-const String dollarString = "Dollar";
-const String euroString = "Euro";
+const String shekelString = "\₪";
+const String dollarString = "\$";
+const String euroString = "\€";
 
 Currency? stringToCurrency(String? input) {
   if (input == shekelString) {
