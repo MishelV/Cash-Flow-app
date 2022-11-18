@@ -1,3 +1,4 @@
+import 'package:cash_flow_app/widgets/currency_selection_dialog.dart';
 import 'package:flutter/material.dart';
 
 class AppSideDrawer extends StatelessWidget {
@@ -19,9 +20,9 @@ class AppSideDrawer extends StatelessWidget {
           ),
           const Divider(),
           ListTile(
-            title: const Text('Preffered Currency Icon'),
+            title: const Text('Preferred Currency Icon'),
             onTap: () {
-              //TODO: add Preffered Currency Icon
+              currencySelectionDialog(context);
             },
           ),
           const Expanded(
