@@ -1,5 +1,6 @@
 import 'package:cash_flow_app/widgets/currency_selection_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppSideDrawer extends StatelessWidget {
   const AppSideDrawer({Key? key}) : super(key: key);
@@ -31,11 +32,9 @@ class AppSideDrawer extends StatelessWidget {
             ),
           ),
           const Divider(),
-          ListTile(
+          const ListTile(
             title: const Text('Check out the app\'s code! 👨🏻‍💻'),
-            onTap: () {
-              //TODO: implement a referal link to github repo
-            },
+            onTap: openGitHubProject,
           ),
           const Divider(),
           ListTile(
@@ -50,5 +49,16 @@ class AppSideDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+void openGitHubProject() async {
+  const url = "https://github.com/MishelV/Cash-Flow-app";
+  final Uri _url = Uri.parse(url);
+
+  if (await canLaunchUrl(_url)) {
+    await launchUrl(_url, mode: LaunchMode.externalApplication);
+  } else {
+    print("pp AAAAAAA");
   }
 }
