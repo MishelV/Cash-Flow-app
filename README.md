@@ -2,6 +2,9 @@
 ### Written in Dart on Flutter.
 #### Mainly runs on android, support for iOS will be available in the future.
 
+## Disclaimer
+The app's icons was generated using <a target="_blank" href="https://icons8.com/icon/OPqMkQ6oLuyp/cash-flow">Cash Flow</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
+
 ## Instructions
 
 #### You must have [flutter](https://docs.flutter.dev/get-started/install) installed on your machine!
