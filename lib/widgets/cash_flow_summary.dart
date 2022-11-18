@@ -1,7 +1,10 @@
+import 'package:cash_flow_app/providers/shared_preferences_provider.dart';
 import 'package:cash_flow_app/widgets/button_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/cash_flow_summary.dart';
+import '../models/shared_preferences_model.dart';
 
 class CashFlowSummaryWidget extends StatelessWidget {
   final CashFlowSummary cashFlow;
@@ -11,6 +14,8 @@ class CashFlowSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String? currency = currencyToString(
+        Provider.of<SharedPreferencesProvider>(context).getCurrency());
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: const BoxDecoration(
@@ -24,7 +29,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Text(
-              "Cash Flow: ${cashFlow.cashFlow} \$",
+              "Cash Flow: ${cashFlow.cashFlow} $currency",
               style: Theme.of(context).textTheme.headline6,
             ),
             Row(
@@ -35,7 +40,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Expenses: ${cashFlow.expenseSum} \$",
+                    "Expenses: ${cashFlow.expenseSum} $currency",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),
@@ -44,7 +49,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
                 ),
                 FittedBox(
                   child: Text(
-                    "Income: ${cashFlow.incomeSum} \$",
+                    "Income: ${cashFlow.incomeSum} $currency",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ),

@@ -1,6 +1,10 @@
 import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/utils/date_time_util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/shared_preferences_model.dart';
+import '../providers/shared_preferences_provider.dart';
 
 class RecordCard extends StatefulWidget {
   final Record record;
@@ -44,6 +48,9 @@ class _RecordCardState extends State<RecordCard> {
 
   @override
   Widget build(BuildContext context) {
+    final String? currency = currencyToString(
+        Provider.of<SharedPreferencesProvider>(context).getCurrency());
+
     Color c = widget.record.value > 0
         ? Theme.of(context).colorScheme.surface
         : Theme.of(context).colorScheme.inversePrimary;
@@ -96,7 +103,7 @@ class _RecordCardState extends State<RecordCard> {
               leading: SizedBox(
                 height: 40,
                 child: Text(
-                  "${widget.record.value} \$",
+                  "${widget.record.value} $currency",
                   style: _getTextStyle(),
                 ),
               ),

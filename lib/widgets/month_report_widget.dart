@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/month_report_card.dart';
 import '../models/search_type.dart';
+import '../models/shared_preferences_model.dart';
+import '../providers/shared_preferences_provider.dart';
 import '../screens/search_record_screen.dart';
 import 'button_wrapper.dart';
 
@@ -26,8 +29,11 @@ class MonthReportCard extends StatelessWidget {
   Widget cashFlowText(BuildContext context) {
     if (report.summary == null) return NoRecrdsText(context);
 
+    final String? currency = currencyToString(
+        Provider.of<SharedPreferencesProvider>(context).getCurrency());
+
     final posiviteSign = report.summary!.cashFlow > 0 ? "+" : "";
-    final cashFlowText = "$posiviteSign${report.summary!.cashFlow} \$";
+    final cashFlowText = "$posiviteSign${report.summary!.cashFlow} $currency";
 
     return Text(
       cashFlowText,

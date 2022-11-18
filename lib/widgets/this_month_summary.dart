@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
+import 'package:cash_flow_app/providers/shared_preferences_provider.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
 import 'package:cash_flow_app/utils/date_time_util.dart';
 import 'package:cash_flow_app/widgets/button_wrapper.dart';
@@ -10,6 +11,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
 import '../models/search_type.dart';
+import '../models/shared_preferences_model.dart';
 
 class ThisMonthSummary extends StatefulWidget {
   const ThisMonthSummary({Key? key}) : super(key: key);
@@ -50,6 +52,9 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
       );
     }
 
+    final String? currency = currencyToString(
+        Provider.of<SharedPreferencesProvider>(context).getCurrency());
+
     final thisMonthSummary =
         Provider.of<RecordProvider>(context).getMonthSummary(DateTime.now()) ??
             CashFlowSummary(incomeSum: 0, cashFlow: 0, expenseSum: 0);
@@ -89,7 +94,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
               children: [
                 FittedBox(
                   child: Text(
-                    "${DateTimeUtil.months[DateTime.now().month]}'s Cash Flow: ${thisMonthSummary.cashFlow} \$",
+                    "${DateTimeUtil.months[DateTime.now().month]}'s Cash Flow: ${thisMonthSummary.cashFlow} $currency",
                     style: Theme.of(context).textTheme.headline6,
                   ),
                 ),
@@ -116,7 +121,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
-                            "${-1 * thisMonthSummary.expenseSum} \$",
+                            "${-1 * thisMonthSummary.expenseSum} $currency",
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
@@ -128,7 +133,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                           Text(
-                            "${thisMonthSummary.incomeSum} \$",
+                            "${thisMonthSummary.incomeSum} $currency",
                             style: Theme.of(context).textTheme.bodyText1,
                           ),
                         ],
