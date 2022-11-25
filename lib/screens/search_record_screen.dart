@@ -183,7 +183,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
         SizedBox(
           height: 180,
           child: Image.asset(
-            'assets/images/dollar.gif',
+            'assets/images/free_money.png',
           ),
         ),
       ],
