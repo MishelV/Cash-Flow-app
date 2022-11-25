@@ -9,10 +9,11 @@ import '../screens/search_record_screen.dart';
 import 'button_wrapper.dart';
 
 class MonthReportCard extends StatelessWidget {
-  MonthReportModel report;
-  Function tapCallback;
+  final MonthReportModel report;
+  final Function tapCallback;
 
-  MonthReportCard({Key? key, required this.report, required this.tapCallback})
+  const MonthReportCard(
+      {Key? key, required this.report, required this.tapCallback})
       : super(key: key);
 
   Widget titleText(BuildContext context) {
@@ -24,12 +25,12 @@ class MonthReportCard extends StatelessWidget {
             ?.copyWith(color: Colors.black, fontSize: 20));
   }
 
-  Widget NoRecrdsText(BuildContext context) {
+  Widget noRecrdsText(BuildContext context) {
     return Text("No records!", style: Theme.of(context).textTheme.headline3);
   }
 
   Widget cashFlowText(BuildContext context) {
-    if (report.summary == null) return NoRecrdsText(context);
+    if (report.summary == null) return noRecrdsText(context);
 
     final String? currency = currencyToString(
         Provider.of<SharedPreferencesProvider>(context).getCurrency());
@@ -85,11 +86,11 @@ Expense: ${report.summary!.expenseSum}
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(child: titleText(context)),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Flexible(child: cashFlowText(context)),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Flexible(child: cashFlowDetailsText(context))

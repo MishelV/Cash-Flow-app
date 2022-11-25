@@ -80,7 +80,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
           backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         body: _isLoading
-            ? CircularProgressIndicator()
+            ? const CircularProgressIndicator()
             : Column(
                 children: [
                   Expanded(
