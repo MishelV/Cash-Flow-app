@@ -44,10 +44,17 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: SizedBox(
-                  height: 210,
-                  width: 210,
-                  child: rotatingLogo,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    SizedBox(
+                      height: 210,
+                      width: 210,
+                      child: rotatingLogo,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(
