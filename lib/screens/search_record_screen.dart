@@ -107,7 +107,9 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   }
 
   void navigateToAddRecord() {
-    Navigator.of(context).pushNamed(EditRecordScreen.routeName);
+    Navigator.of(context).pushNamed(EditRecordScreen.routeName).then((_) {
+      setRecords();
+    });
   }
 
   @override

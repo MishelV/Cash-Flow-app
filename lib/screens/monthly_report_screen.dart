@@ -19,15 +19,20 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
   var _isInit = true;
   var _isLoading = false;
 
-  void setReportCard() async {
+  void setReportCard(int numberOfMonths) async {
     orderedMonthReportCards =
         await Provider.of<RecordProvider>(context, listen: false)
-            .getMonthReportList(from: DateTime.now(), numberOfMonths: 6)
+            .getMonthReportList(
+                from: DateTime.now(), numberOfMonths: numberOfMonths)
             .whenComplete(() {
       setState(() {
         _isLoading = false;
       });
     });
+  }
+
+  void updateReportCards() {
+    setReportCard(orderedMonthReportCards.length);
   }
 
   @override
@@ -36,7 +41,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
     if (_isInit) {
       _isLoading = true;
       _isInit = false;
-      setReportCard();
+      setReportCard(4);
     }
   }
 
@@ -92,7 +97,8 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                           itemCount: orderedMonthReportCards.length,
                           itemBuilder: (BuildContext ctx, index) {
                             return MonthReportCard(
-                                report: orderedMonthReportCards[index]);
+                                report: orderedMonthReportCards[index],
+                                tapCallback: updateReportCards);
                           }),
                     ),
                   ),

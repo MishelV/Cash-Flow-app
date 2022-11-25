@@ -10,8 +10,10 @@ import 'button_wrapper.dart';
 
 class MonthReportCard extends StatelessWidget {
   MonthReportModel report;
+  Function tapCallback;
 
-  MonthReportCard({Key? key, required this.report}) : super(key: key);
+  MonthReportCard({Key? key, required this.report, required this.tapCallback})
+      : super(key: key);
 
   Widget titleText(BuildContext context) {
     final title = "${report.date.month} / ${report.date.year}";
@@ -74,7 +76,9 @@ Expense: ${report.summary!.expenseSum}
                 SearchType.monthSummary,
                 report.date,
               ],
-            );
+            ).then((_) {
+              tapCallback();
+            });
           },
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
