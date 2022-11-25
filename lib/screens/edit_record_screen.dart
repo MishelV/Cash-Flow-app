@@ -8,6 +8,13 @@ import 'package:provider/provider.dart';
 
 import '../widgets/delete_record_dialog.dart';
 
+class EditRecordAguments {
+  final String recordId;
+  final customStartDate;
+
+  EditRecordAguments({this.recordId = "", this.customStartDate = ""});
+}
+
 class EditRecordScreen extends StatefulWidget {
   const EditRecordScreen({Key? key}) : super(key: key);
 
@@ -48,10 +55,17 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit && (ModalRoute.of(context) != null)) {
-      final recordId = ModalRoute.of(context)!.settings.arguments as String?;
-      if (recordId != null && recordId.isNotEmpty) {
+      setState(() {
+        _isInit = false;
+      });
+      final arguments =
+          ModalRoute.of(context)!.settings.arguments as EditRecordAguments?;
+
+      if (arguments == null) return;
+
+      if (arguments.recordId != null && arguments.recordId.isNotEmpty) {
         Record? record = Provider.of<RecordProvider>(context, listen: false)
-            .getRecordById(recordId);
+            .getRecordById(arguments.recordId);
         if (record != null) {
           setState(() {
             _screenName = "Edit Record";
@@ -69,10 +83,12 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
           });
         }
       }
+      if (arguments.customStartDate.isNotEmpty) {
+        setState(() {
+          _startDate = arguments.customStartDate;
+        });
+      }
     }
-    setState(() {
-      _isInit = false;
-    });
     super.didChangeDependencies();
   }
 

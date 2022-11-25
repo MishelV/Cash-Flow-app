@@ -32,8 +32,9 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   var _screenName = "";
 
   void editRecord(Record record, BuildContext context) {
+    final arguments = EditRecordAguments(recordId: record.id);
     Navigator.of(context)
-        .pushNamed(EditRecordScreen.routeName, arguments: record.id)
+        .pushNamed(EditRecordScreen.routeName, arguments: arguments)
         .then((_) {
       setRecords();
     });
@@ -107,7 +108,11 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
   }
 
   void navigateToAddRecord() {
-    Navigator.of(context).pushNamed(EditRecordScreen.routeName).then((_) {
+    final arguments =
+        EditRecordAguments(customStartDate: _startDate.toString());
+    Navigator.of(context)
+        .pushNamed(EditRecordScreen.routeName, arguments: arguments)
+        .then((_) {
       setRecords();
     });
   }
