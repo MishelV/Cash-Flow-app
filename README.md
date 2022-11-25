@@ -4,7 +4,7 @@
 
 ## Instructions
 
-#### You must have [flutter](https://docs.flutter.dev/get-started/install) installed on your machine!
+#### You must have [Flutter](https://docs.flutter.dev/get-started/install) installed on your machine!
 
 1. Clone the repo to your local machine.
 2. Run "flutter pub get" in your terminal to fetch the flutter packages.
