@@ -41,7 +41,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
     if (_isInit) {
       _isLoading = true;
       _isInit = false;
-      setReportCard(4);
+      setReportCard(6);
     }
   }
 
