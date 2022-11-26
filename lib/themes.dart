@@ -14,12 +14,11 @@ const colorScheme = ColorScheme(
   surface: Color(0xFFB6D96A),
   onSurface: Color(0xFF53A62D),
   inversePrimary: Color.fromARGB(255, 170, 65, 63),
-  // tertiary: Color.fromARGB(185, 177, 50, 48),
 );
 
 final elevatedButtonTheme = ElevatedButtonThemeData(
   style: ElevatedButton.styleFrom(
-    shape: CircleBorder(),
+    shape: const CircleBorder(),
     padding: const EdgeInsets.all(20),
     backgroundColor: colorScheme.surface,
     foregroundColor: Colors.black,
@@ -36,7 +35,6 @@ final textTheme = TextTheme(
   headline2: const TextStyle(
     fontSize: 36.0,
     fontWeight: FontWeight.w300,
-    // color: Color(0xFF707365),
     fontFamily: 'Nunito',
   ),
   headline3: const TextStyle(
