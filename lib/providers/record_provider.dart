@@ -122,10 +122,12 @@ class RecordProvider with ChangeNotifier {
     List<Record> records = getRecordsByTimeFrame(startDate, endDate);
     if (keyword.isEmpty && type == RecordType.all) return records;
 
+    keyword = keyword.toLowerCase();
+
     List<Record> matchingRecords = [];
     for (Record r in records) {
-      if ((r.name.contains(keyword) ||
-              r.description.contains(keyword) ||
+      if ((r.name.toLowerCase().contains(keyword) ||
+              r.description.toLowerCase().contains(keyword) ||
               keyword.isEmpty) &&
           recordTypeMatch(r, type)) {
         matchingRecords.add(r);
