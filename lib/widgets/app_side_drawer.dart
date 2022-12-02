@@ -15,9 +15,7 @@ class AppSideDrawer extends StatelessWidget {
             title: const Text('Settings'),
             automaticallyImplyLeading:
                 false, // this will hide Drawer hamburger icon
-            actions: <Widget>[
-              Container()
-            ], // this will hide endDrawer hamburger icon
+            actions: <Widget>[Container()],
           ),
           const Divider(),
           ListTile(

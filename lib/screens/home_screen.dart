@@ -69,7 +69,6 @@ class HomeScreen extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          // const HelloWidget(userName: "There"),
           Center(
             child: ActionsWidget(beforeAction: () {
               rotatingLogo.stopAnimation();
@@ -77,7 +76,6 @@ class HomeScreen extends StatelessWidget {
               rotatingLogo.continueAnimation();
             }),
           ),
-
           const Center(
             child: ThisMonthSummary(),
           ),
