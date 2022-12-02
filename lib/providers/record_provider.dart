@@ -1,4 +1,3 @@
-import 'package:cash_flow_app/helpers/hive_db_helper.dart';
 import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
 import 'package:cash_flow_app/models/month_report_card.dart';
@@ -50,40 +49,6 @@ class RecordProvider with ChangeNotifier {
           date, DateTimeUtil.getDateTime(r.startDate))) {
         monthRecords.add(r);
       }
-
-      /// Uncomment when we re-add the recurring records.
-      // if (r.repeatDays != 0) {
-      //   Duration recurrenceInDays = Duration(days: r.repeatDays);
-      //   DateTime startDate = DateTimeUtil.getDateTime(r.startDate);
-      //   DateTime endDate = DateTimeUtil.getRecentDate(
-      //       DateTime(date.year, date.month + 1),
-      //       DateTimeUtil.getDateTime(r.endDate));
-
-      //   if (r.repeatDays == 30) {
-      //     //handling the case of monthly recurrence.
-      //     startDate =
-      //         DateTime(startDate.year, startDate.month + 1, startDate.day);
-      //   } else {
-      //     startDate = startDate.add(recurrenceInDays);
-      //   }
-
-      //   int runningIndex = 0;
-      //   while (startDate.isBefore(endDate)) {
-      //     runningIndex += 1;
-      //     if (DateTimeUtil.sameYearMonth(date, startDate)) {
-      //       Record t = Record(
-      //           id: "t$runningIndex${DateTime.now().millisecondsSinceEpoch}",
-      //           repeatDays: r.repeatDays,
-      //           name: r.name,
-      //           endDate: r.endDate,
-      //           startDate: startDate.toString().split(' ')[0],
-      //           value: r.value,
-      //           description: r.description);
-      //       monthRecords.add(t);
-      //     }
-      //     startDate = startDate.add(recurrenceInDays);
-      //   }
-      // }
     }
     return monthRecords;
   }
@@ -197,16 +162,4 @@ class RecordProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // void migrateDataToSQFLite() {
-  //   for (final record in _records) {
-  //     SQFLiteDBHelper().insertRecord(record);
-  //   }
-  // }
-
-  // void clearRecords() {
-  //   _records.clear();
-  //   HiveDBHelper().clearRecords();
-  //   notifyListeners();
-  // }
 }

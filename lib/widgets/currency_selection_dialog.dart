@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/shared_preferences_model.dart';
-import '../providers/record_provider.dart';
 
 Future<void> currencySelectionDialog(BuildContext context) async {
   await showDialog(

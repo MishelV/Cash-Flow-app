@@ -146,21 +146,21 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
                   ),
                   child: Form(
                     key: _formKey,
-                    child: SearchRecordWidget(context),
+                    child: searchRecordWidget(context),
                   ),
                 ),
-                if (_records.isNotEmpty) RecordsListWidget(),
+                if (_records.isNotEmpty) recordsListWidget(),
                 if (_records.isNotEmpty)
                   CashFlowSummaryWidget(
                     cashFlow: cashFlow,
                   ),
-                if (_records.isEmpty) NoRecordsWidget(context),
+                if (_records.isEmpty) noRecordsWidget(context),
               ],
             ),
     );
   }
 
-  Expanded RecordsListWidget() {
+  Expanded recordsListWidget() {
     return Expanded(
       child: ListView.builder(
         itemBuilder: (ctx, index) {
@@ -175,7 +175,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     );
   }
 
-  Column NoRecordsWidget(BuildContext context) {
+  Column noRecordsWidget(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -197,7 +197,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     );
   }
 
-  Container SearchRecordWidget(BuildContext context) {
+  Container searchRecordWidget(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(

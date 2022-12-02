@@ -10,7 +10,7 @@ import '../widgets/delete_record_dialog.dart';
 
 class EditRecordAguments {
   final String recordId;
-  final customStartDate;
+  final String customStartDate;
 
   EditRecordAguments({this.recordId = "", this.customStartDate = ""});
 }
