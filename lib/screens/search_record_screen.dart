@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../models/filter_parameters.dart';
 import '../models/search_type.dart';
+import '../utils/date_time_util.dart';
 import '../widgets/search_screen/cash_flow_timeframe_summary_widget.dart';
 import '../widgets/search_screen/filter_records_widget.dart';
 
@@ -36,22 +37,6 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
     });
   }
 
-  DateTime endOfMonthFor(DateTime date) {
-    DateTime nextMonth = date.month == 12
-        ? DateTime(date.year + 1, 1)
-        : DateTime(date.year, date.month + 1);
-
-    return nextMonth.subtract(const Duration(days: 1));
-  }
-
-  DateTime nextYearOf(DateTime date) {
-    return date.add(const Duration(days: 365));
-  }
-
-  DateTime previousYearOf(DateTime date) {
-    return date.subtract(const Duration(days: 365));
-  }
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -67,7 +52,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
               _parameters = FilterParameters(
                 keyword: "",
                 startDate: DateTime(date.year, date.month),
-                endDate: endOfMonthFor(date),
+                endDate: DateTimeUtil.endOfMonthFor(date),
                 type: RecordType.all,
               );
               _screenName = "Records Summary";
@@ -78,7 +63,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
               _parameters = FilterParameters(
                 keyword: "",
                 startDate: DateTime.now(),
-                endDate: nextYearOf(DateTime.now()),
+                endDate: DateTimeUtil.nextYearOf(DateTime.now()),
                 type: RecordType.expense,
               );
               _screenName = "Upcoming Expenses";
@@ -89,7 +74,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
             setState(() {
               _parameters = FilterParameters(
                 keyword: "",
-                startDate: previousYearOf(DateTime.now()),
+                startDate: DateTimeUtil.previousYearOf(DateTime.now()),
                 endDate: DateTime.now(),
                 type: RecordType.all,
               );

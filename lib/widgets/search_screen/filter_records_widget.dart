@@ -127,7 +127,7 @@ class _FilterRecordsWidgetState extends State<FilterRecordsWidget> {
                   onChanged: (val) {
                     setState(() {
                       widget.parameters.startDate =
-                          DateTimeUtil.getDateTime(val);
+                          DateTimeUtil.getDateWithTimeFromString(val);
                     });
                   },
                 ),
@@ -146,7 +146,8 @@ class _FilterRecordsWidgetState extends State<FilterRecordsWidget> {
                   dateLabelText: 'End Date',
                   onChanged: (val) {
                     setState(() {
-                      widget.parameters.endDate = DateTimeUtil.getDateTime(val);
+                      widget.parameters.endDate =
+                          DateTimeUtil.getDateWithTimeFromString(val);
                     });
                   },
                 ),

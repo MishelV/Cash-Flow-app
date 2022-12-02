@@ -46,8 +46,8 @@ class RecordProvider with ChangeNotifier {
   List<Record> getRecordsByYearMonth(DateTime date) {
     List<Record> monthRecords = [];
     for (Record r in _records) {
-      if (DateTimeUtil.sameYearMonth(
-          date, DateTimeUtil.getDateTime(r.startDate))) {
+      if (DateTimeUtil.isSameYearMonth(
+          date, DateTimeUtil.getDateWithTimeFromString(r.startDate))) {
         monthRecords.add(r);
       }
     }
@@ -74,8 +74,9 @@ class RecordProvider with ChangeNotifier {
   }
 
   bool recordIsInTimeFrame(Record r, DateTime start, DateTime end) {
-    return start.isBefore(DateTimeUtil.getDateTime(r.startDate)) &&
-        end.isAfter(DateTimeUtil.getDateTime(r.startDate));
+    return start
+            .isBefore(DateTimeUtil.getDateWithTimeFromString(r.startDate)) &&
+        end.isAfter(DateTimeUtil.getDateWithTimeFromString(r.startDate));
   }
 
   bool recordTypeMatch(Record r, RecordType t) {

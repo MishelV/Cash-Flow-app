@@ -94,7 +94,8 @@ class _RecordCardState extends State<RecordCard> {
                         style: _getSmallerTextStyle(),
                       ),
                     Text(
-                      DateTimeUtil.getDateString(widget.record.startDate),
+                      DateTimeUtil.getFormattedDateStringFromString(
+                          widget.record.startDate),
                       style: _getSmallerTextStyle(),
                     ),
                   ],
