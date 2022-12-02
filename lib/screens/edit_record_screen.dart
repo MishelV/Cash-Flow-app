@@ -10,9 +10,8 @@ import '../widgets/edit_record_screen/delete_record_dialog.dart';
 
 class EditRecordAguments {
   final String recordId;
-  final String customStartDate;
 
-  EditRecordAguments({this.recordId = "", this.customStartDate = ""});
+  EditRecordAguments({this.recordId = ""});
 }
 
 class EditRecordScreen extends StatefulWidget {
@@ -82,11 +81,6 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
             _editingExistingRecord = true;
           });
         }
-      }
-      if (arguments.customStartDate.isNotEmpty) {
-        setState(() {
-          _startDate = arguments.customStartDate;
-        });
       }
     }
     super.didChangeDependencies();
