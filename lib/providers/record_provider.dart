@@ -1,5 +1,6 @@
 import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
 import 'package:cash_flow_app/models/cash_flow_summary.dart';
+import 'package:cash_flow_app/models/filter_parameters.dart';
 import 'package:cash_flow_app/models/month_report_card.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -82,19 +83,27 @@ class RecordProvider with ChangeNotifier {
         t == RecordType.income && r.value < 0);
   }
 
-  Future<List<Record>> getRecordsFromTimeFrameByKeyword(String keyword,
-      DateTime startDate, DateTime endDate, RecordType type) async {
-    List<Record> records = getRecordsByTimeFrame(startDate, endDate);
-    if (keyword.isEmpty && type == RecordType.all) return records;
+  Future<List<Record>> getRecordsByFilterParameters(
+      FilterParameters parameters) async {
+    // Making the end date to be set to the end of the end date so that
+    // it'll include records that were done on that day.
+    DateTime inclusiveEndDate = DateTime(parameters.endDate.year,
+        parameters.endDate.month, parameters.endDate.day, 23, 59);
 
-    keyword = keyword.toLowerCase();
+    List<Record> records =
+        getRecordsByTimeFrame(parameters.startDate, inclusiveEndDate);
+    if (parameters.keyword.isEmpty && parameters.type == RecordType.all) {
+      return records;
+    }
+
+    final keyword = parameters.keyword.toLowerCase();
 
     List<Record> matchingRecords = [];
     for (Record r in records) {
       if ((r.name.toLowerCase().contains(keyword) ||
               r.description.toLowerCase().contains(keyword) ||
               keyword.isEmpty) &&
-          recordTypeMatch(r, type)) {
+          recordTypeMatch(r, parameters.type)) {
         matchingRecords.add(r);
       }
     }
