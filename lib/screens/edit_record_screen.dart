@@ -1,12 +1,12 @@
 import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
-import 'package:cash_flow_app/widgets/button_wrapper.dart';
+import 'package:cash_flow_app/widgets/general/button_wrapper.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/delete_record_dialog.dart';
+import '../widgets/edit_record_screen/delete_record_dialog.dart';
 
 class EditRecordAguments {
   final String recordId;

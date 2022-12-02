@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/month_report_card.dart';
 import '../providers/record_provider.dart';
-import '../widgets/month_report_widget.dart';
+import '../widgets/monthly_report_screen/month_report_card_widget.dart';
 
 class MonthlyReportScreen extends StatefulWidget {
   const MonthlyReportScreen({Key? key}) : super(key: key);

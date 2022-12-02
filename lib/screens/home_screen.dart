@@ -1,9 +1,9 @@
-import 'package:cash_flow_app/widgets/actions_widget.dart';
-import 'package:cash_flow_app/widgets/rotating_app_logo.dart';
-import 'package:cash_flow_app/widgets/this_month_summary.dart';
+import 'package:cash_flow_app/widgets/home_screen/actions_widget.dart';
+import 'package:cash_flow_app/widgets/home_screen/rotating_app_logo.dart';
+import 'package:cash_flow_app/widgets/home_screen/this_month_summary.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/app_side_drawer.dart';
+import '../widgets/home_screen/app_side_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);

@@ -2,14 +2,14 @@ import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/providers/record_provider.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
 import 'package:cash_flow_app/utils/date_time_util.dart';
-import 'package:cash_flow_app/widgets/button_wrapper.dart';
-import 'package:cash_flow_app/widgets/record_card.dart';
+import 'package:cash_flow_app/widgets/general/button_wrapper.dart';
+import 'package:cash_flow_app/widgets/search_screen/record_card.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/search_type.dart';
-import '../widgets/cash_flow_summary.dart';
+import '../widgets/search_screen/cash_flow_timeframe_summary_widget.dart';
 
 class SearchRecordScreen extends StatefulWidget {
   const SearchRecordScreen({Key? key}) : super(key: key);
