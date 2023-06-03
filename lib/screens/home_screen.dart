@@ -3,7 +3,7 @@ import 'package:cash_flow_app/widgets/home_screen/rotating_app_logo.dart';
 import 'package:cash_flow_app/widgets/home_screen/this_month_summary.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/home_screen/app_side_drawer.dart';
+import '../widgets/home_screen/settings_side_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);

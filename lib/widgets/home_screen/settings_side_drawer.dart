@@ -39,6 +39,11 @@ class AppSideDrawer extends StatelessWidget {
             title: Text('Buy the developer a coffee! ☕'),
             onTap: openBuyMeCoffee,
           ),
+          const Divider(),
+          const ListTile(
+            title: Text('Privacy Policy 🔒'),
+            onTap: openPrivacyPolicy,
+          ),
           const SizedBox(
             height: 30,
           ),
@@ -61,6 +66,18 @@ void openGitHubProject() async {
 
 void openBuyMeCoffee() async {
   const url = "https://www.buymeacoffee.com/VeksApps";
+  final Uri _url = Uri.parse(url);
+
+  if (await canLaunchUrl(_url)) {
+    await launchUrl(_url, mode: LaunchMode.externalApplication);
+  } else {
+    throw "Could not launch $url";
+  }
+}
+
+void openPrivacyPolicy() async {
+  const url =
+      "https://github.com/MishelV/Cash-Flow-app/blob/main/privacy_policy.txt";
   final Uri _url = Uri.parse(url);
 
   if (await canLaunchUrl(_url)) {
