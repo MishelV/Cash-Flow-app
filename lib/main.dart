@@ -32,8 +32,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFEAF2CE),
         fontFamily: 'Source Sans Pro',
-        colorScheme: colorScheme.copyWith(
-            background: const Color.fromARGB(255, 151, 234, 154)),
+        colorScheme: colorScheme,
         elevatedButtonTheme: elevatedButtonTheme,
         cardTheme: cardTheme,
         textTheme: textTheme,
