@@ -37,9 +37,10 @@ dependencies:
   flutter_spinbox: ^0.9.0
   sqflite: ^2.2.0+3
   path: ^1.8.0
+  path_provider: ^2.0.2
+  csv: ^5.0.2
   shared_preferences: ^2.0.15
   url_launcher: ^6.1.6
-  file: ^6.1.2
 
 dev_dependencies:
   flutter_test:
