@@ -11,7 +11,7 @@ Future<void> currencySelectionDialog(BuildContext context) async {
       title: const Text("Settings"),
       content: Text(
         "Select your preferred currency Icon!",
-        style: Theme.of(context).textTheme.headline3,
+        style: Theme.of(context).textTheme.displaySmall,
       ),
       actionsAlignment: MainAxisAlignment.spaceEvenly,
       actions: [
@@ -57,7 +57,7 @@ Future<void> currencySelectionDialog(BuildContext context) async {
 }
 
 TextStyle? currencySelectionTextStyle(BuildContext context) {
-  return Theme.of(context).textTheme.headline5;
+  return Theme.of(context).textTheme.headlineSmall;
 }
 
 ButtonStyle currencyTextButtonStyle(BuildContext context) {

@@ -1,4 +1,3 @@
-import 'package:cash_flow_app/models/record.dart';
 import 'package:cash_flow_app/screens/edit_record_screen.dart';
 import 'package:cash_flow_app/screens/monthly_report_screen.dart';
 import 'package:cash_flow_app/screens/search_record_screen.dart';
@@ -114,7 +113,7 @@ class ActionButton extends StatelessWidget {
           Text(
             buttonName,
             textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
         ],
       ),

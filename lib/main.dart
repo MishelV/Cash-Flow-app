@@ -31,9 +31,9 @@ class MyApp extends StatelessWidget {
       title: 'Cash Flow',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xFFEAF2CE),
-        backgroundColor: const Color.fromARGB(255, 151, 234, 154),
         fontFamily: 'Source Sans Pro',
-        colorScheme: colorScheme,
+        colorScheme: colorScheme.copyWith(
+            background: const Color.fromARGB(255, 151, 234, 154)),
         elevatedButtonTheme: elevatedButtonTheme,
         cardTheme: cardTheme,
         textTheme: textTheme,

@@ -95,7 +95,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                 FittedBox(
                   child: Text(
                     "${DateTimeUtil.months[DateTime.now().month]}'s Cash Flow: ${thisMonthSummary.cashFlow} $currency",
-                    style: Theme.of(context).textTheme.headline6,
+                    style: Theme.of(context).textTheme.titleLarge,
                   ),
                 ),
                 const SizedBox(
@@ -104,7 +104,7 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                 if (noRecords)
                   Center(
                     child: Text("No records for this month!",
-                        style: Theme.of(context).textTheme.bodyText1),
+                        style: Theme.of(context).textTheme.bodyLarge),
                   ),
                 if (!noRecords)
                   FittedBox(
@@ -118,11 +118,11 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                         children: [
                           Text(
                             "Expenses",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Text(
                             "${-1 * thisMonthSummary.expenseSum} $currency",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ),
@@ -130,18 +130,18 @@ class _ThisMonthSummaryState extends State<ThisMonthSummary> {
                         children: [
                           Text(
                             "Income",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                           Text(
                             "${thisMonthSummary.incomeSum} $currency",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ),
                       percent: spentPercent,
                       center: Text(
                         "Spent ${(spentPercent * 100).round()}%",
-                        style: Theme.of(context).textTheme.headline5,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                       progressColor:
                           Theme.of(context).colorScheme.inversePrimary,

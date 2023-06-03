@@ -19,7 +19,7 @@ Future<bool> deleteRecordDialog(
             SizedBox(
               child: Text(
                 "Are you sure you wish to delete the record of '$recordName'?",
-                style: Theme.of(context).textTheme.bodyText1,
+                style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
           ],
@@ -40,7 +40,7 @@ Future<bool> deleteRecordDialog(
             ),
             child: Text(
               "Abort!",
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
         ),
@@ -61,7 +61,7 @@ Future<bool> deleteRecordDialog(
             ),
             child: Text(
               "Delete!",
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),
         )

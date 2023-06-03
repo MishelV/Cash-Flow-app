@@ -21,12 +21,12 @@ class MonthReportCard extends StatelessWidget {
     return Text(title,
         style: Theme.of(context)
             .textTheme
-            .headline6
+            .titleLarge
             ?.copyWith(color: Colors.black, fontSize: 20));
   }
 
   Widget noRecrdsText(BuildContext context) {
-    return Text("No records!", style: Theme.of(context).textTheme.headline3);
+    return Text("No records!", style: Theme.of(context).textTheme.displaySmall);
   }
 
   Widget cashFlowText(BuildContext context) {
@@ -40,7 +40,7 @@ class MonthReportCard extends StatelessWidget {
 
     return Text(
       cashFlowText,
-      style: Theme.of(context).textTheme.headline4?.copyWith(
+      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
             color: report.summary!.cashFlow < 0
                 ? Theme.of(context).colorScheme.inversePrimary
                 : report.summary!.cashFlow > 0
@@ -59,7 +59,7 @@ Expense: ${report.summary!.expenseSum}
 """;
     return Text(
       cashFlowDetails,
-      style: Theme.of(context).textTheme.bodyText1?.copyWith(fontSize: 13),
+      style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 13),
     );
   }
 

@@ -62,7 +62,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
 
       if (arguments == null) return;
 
-      if (arguments.recordId != null && arguments.recordId.isNotEmpty) {
+      if (arguments.recordId.isNotEmpty) {
         Record? record = Provider.of<RecordProvider>(context, listen: false)
             .getRecordById(arguments.recordId);
         if (record != null) {
@@ -443,7 +443,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                         ),
                         child: Text(
                           _editingExistingRecord ? "Update" : "Submit",
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
                     ),
@@ -461,7 +461,7 @@ class _EditRecordScreenState extends State<EditRecordScreen> {
                           ),
                           child: Text(
                             "Delete",
-                            style: Theme.of(context).textTheme.bodyText1,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ),
                       ),

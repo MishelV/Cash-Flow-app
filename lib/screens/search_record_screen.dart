@@ -195,7 +195,7 @@ class _SearchRecordScreenState extends State<SearchRecordScreen> {
         ),
         Text(
           "No records to show!",
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
         SizedBox(
           height: 180,

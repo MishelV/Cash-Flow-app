@@ -27,39 +27,39 @@ final elevatedButtonTheme = ElevatedButtonThemeData(
 );
 
 final textTheme = TextTheme(
-  headline1: const TextStyle(
+  displayLarge: const TextStyle(
     fontSize: 48.0,
     fontWeight: FontWeight.bold,
     color: Color(0xFF53A62D),
   ),
-  headline2: const TextStyle(
+  displayMedium: const TextStyle(
     fontSize: 36.0,
     fontWeight: FontWeight.w300,
     fontFamily: 'Nunito',
   ),
-  headline3: const TextStyle(
+  displaySmall: const TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
     fontFamily: 'Nunito',
   ),
-  headline6: TextStyle(
-    fontSize: 24.0,
-    color: colorScheme.primary,
-    fontWeight: FontWeight.bold,
-    fontFamily: 'Quicksand',
-  ),
-  headline5: const TextStyle(
+  headlineSmall: const TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.bold,
     fontFamily: 'Quicksand',
     color: Colors.white,
   ),
-  bodyText1: const TextStyle(
+  titleLarge: TextStyle(
+    fontSize: 24.0,
+    color: colorScheme.primary,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Quicksand',
+  ),
+  bodyLarge: const TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.w400,
     fontFamily: 'Quicksand',
   ),
-  bodyText2: const TextStyle(
+  bodyMedium: const TextStyle(
     fontSize: 16.0,
     fontWeight: FontWeight.w400,
     fontFamily: 'Quicksand',

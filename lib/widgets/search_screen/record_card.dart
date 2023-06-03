@@ -26,14 +26,14 @@ class _RecordCardState extends State<RecordCard> {
 
   TextStyle? _getTextStyle() {
     return widget.record.value > 0
-        ? Theme.of(context).textTheme.bodyText1
-        : Theme.of(context).textTheme.bodyText2;
+        ? Theme.of(context).textTheme.bodyLarge
+        : Theme.of(context).textTheme.bodyMedium;
   }
 
   TextStyle? _getSmallerTextStyle() {
     TextStyle? style = widget.record.value > 0
-        ? Theme.of(context).textTheme.bodyText1
-        : Theme.of(context).textTheme.bodyText2;
+        ? Theme.of(context).textTheme.bodyLarge
+        : Theme.of(context).textTheme.bodyMedium;
 
     if (style != null) {
       return TextStyle(

@@ -30,7 +30,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
           children: [
             Text(
               "Cash Flow: ${cashFlow.cashFlow} $currency",
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -41,7 +41,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
                 FittedBox(
                   child: Text(
                     "Expenses: ${cashFlow.expenseSum} $currency",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 const SizedBox(
@@ -50,7 +50,7 @@ class CashFlowSummaryWidget extends StatelessWidget {
                 FittedBox(
                   child: Text(
                     "Income: ${cashFlow.incomeSum} $currency",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ),
                 const SizedBox(
