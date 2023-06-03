@@ -39,6 +39,7 @@ dependencies:
   path: ^1.8.0
   shared_preferences: ^2.0.15
   url_launcher: ^6.1.6
+  file: ^6.1.2
 
 dev_dependencies:
   flutter_test:
