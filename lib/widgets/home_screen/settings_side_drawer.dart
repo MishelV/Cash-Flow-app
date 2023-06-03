@@ -1,6 +1,11 @@
+import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
+import 'package:cash_flow_app/widgets/general/information_dialog.dart';
 import 'package:cash_flow_app/widgets/home_screen/currency_selection_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:restart_app/restart_app.dart';
+
+import '../../models/import_records_models.dart';
 
 class AppSideDrawer extends StatelessWidget {
   const AppSideDrawer({Key? key}) : super(key: key);
@@ -22,6 +27,41 @@ class AppSideDrawer extends StatelessWidget {
             title: const Text('Preferred Currency Icon'),
             onTap: () {
               currencySelectionDialog(context);
+            },
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text('Import Records'),
+            onTap: () {
+              SQFLiteDBHelper()
+                  .importTableFromCSV(ImportOption.overrideTable)
+                  .then((result) {
+                if (result == ImportStatus.success) {
+                  showInformationDialog(context,
+                      "Records were imported successfully! Please restart the app for it to work properly.",
+                      buttonText: "Let's restart the App!", onDismiss: () {
+                    Restart.restartApp();
+                  });
+                } else {
+                  showErrorDialog(context,
+                      "An error has occurred while importing the file. Please try again or contact us if the error persists.");
+                }
+              });
+            },
+          ),
+          const Divider(),
+          ListTile(
+            title: const Text('Export Records'),
+            onTap: () {
+              SQFLiteDBHelper().exportTableToCSV().then((success) {
+                if (success) {
+                  showInformationDialog(
+                      context, "Records were exported successfully!");
+                } else {
+                  showErrorDialog(context,
+                      "An error has occurred while exporting the records to a file. Please try again or contact us if the error persists.");
+                }
+              });
             },
           ),
           const Expanded(
