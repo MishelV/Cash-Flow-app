@@ -4,8 +4,96 @@ import 'package:cash_flow_app/widgets/home_screen/currency_selection_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+// import 'dart:io';
+// import 'package:http/http.dart' as http;
+// import 'package:googleapis/drive/v3.dart' as drive;
 
 import '../../models/import_records_models.dart';
+
+final googleSignIn = GoogleSignIn(
+  scopes: [
+    'email',
+    'https://www.googleapis.com/auth/drive.file',
+  ],
+);
+
+// Future<void> backupFileToDrive(String filePath) async {
+//   try {
+//     final GoogleSignInAccount? account = await googleSignIn.signIn();
+//     final authHeaders = await account!.authHeaders;
+//     final authenticateClient = GoogleAuthClient(authHeaders);
+//     final driveApi = drive.DriveApi(authenticateClient);
+
+//     final file = drive.File();
+//     file.name = 'backup.csv'; // Specify the desired file name
+
+//     final uploadMedia = drive.Media(
+//       http.StreamedMedia(
+//         http.ByteStream(file.openRead()),
+//         await file.length(),
+//         contentType: drive.FileImageMediaType,
+//       ),
+//     );
+
+//     final result = await driveApi.files.create(file, uploadMedia: uploadMedia);
+//     print('File uploaded successfully. File ID: ${result.id}');
+//   } catch (e) {
+//     print('Error uploading file to Google Drive: $e');
+//   }
+// }
+
+// final String accessToken =
+//     '<YOUR_ACCESS_TOKEN>'; // Replace with the obtained access token
+// final String filePath =
+//     '<YOUR_FILE_PATH>'; // Replace with the local path to the file
+// final String fileName =
+//     '<YOUR_FILE_NAME>'; // Replace with the desired name for the file
+
+// Future<void> backupFileToDrive() async {
+//   try {
+//     final file = File(filePath);
+//     final fileContent = await file.readAsBytes();
+
+//     const uploadUrl =
+//         'https://www.googleapis.com/upload/drive/v3/files?uploadType=media';
+//     final headers = {
+//       'Authorization': 'Bearer $accessToken',
+//       'Content-Type': 'application/octet-stream',
+//       'Content-Length': fileContent.length.toString(),
+//       'Content-Disposition': 'attachment; filename="$fileName"',
+//     };
+
+//     final response =
+//         await http.post(uploadUrl as Uri, headers: headers, body: fileContent);
+
+//     if (response.statusCode == 200) {
+//       print('File uploaded successfully.');
+//     } else {
+//       print(
+//           'Error uploading file to Google Drive. Status code: ${response.statusCode}');
+//     }
+//   } catch (e) {
+//     print('Error uploading file to Google Drive: $e');
+//   }
+// }
+
+Future<String> authenticateWithGoogle() async {
+  try {
+    // Prompt the user to select a Google account
+    final GoogleSignInAccount? account = await googleSignIn.signIn();
+
+    // Retrieve the authentication token
+    final GoogleSignInAuthentication authentication =
+        await account!.authentication;
+    final String accessToken = authentication.accessToken ?? '';
+
+    return accessToken;
+  } catch (error) {
+    print('Google authentication error: $error');
+    return '';
+  }
+}
 
 class AppSideDrawer extends StatelessWidget {
   const AppSideDrawer({Key? key}) : super(key: key);
@@ -63,6 +151,22 @@ class AppSideDrawer extends StatelessWidget {
                 }
               });
             },
+          ),
+          const Divider(),
+          ElevatedButton(
+            onPressed: () async {
+              authenticateWithGoogle().then((accessToken) {
+                if (accessToken.isNotEmpty) {
+                  // Access token obtained successfully, proceed with API calls
+                  // Save the access token securely or use it as needed
+                  print('Access token: $accessToken');
+                } else {
+                  // Handle authentication error
+                  print('Authentication failed.');
+                }
+              });
+            },
+            child: Text('Sign in with Google'),
           ),
           const Expanded(
             child: SizedBox(
