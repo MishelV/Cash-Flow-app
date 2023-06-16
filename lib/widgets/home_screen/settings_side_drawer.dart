@@ -2,14 +2,13 @@ import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
 import 'package:cash_flow_app/widgets/general/information_dialog.dart';
 import 'package:cash_flow_app/widgets/home_screen/currency_selection_dialog.dart';
 import 'package:flutter/material.dart';
-// import 'package:googleapis/people/v1.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
-// import 'package:googleapis/drive/v3.dart' as drive;
-// import "package:googleapis_auth/auth_io.dart" as google_auth;
+
+import 'dart:io';
+import 'dart:convert';
 
 import '../../models/import_records_models.dart';
 
@@ -19,31 +18,6 @@ final googleSignIn = GoogleSignIn(
     'https://www.googleapis.com/auth/drive.file',
   ],
 );
-
-// Future<void> backupFileToDrive(String filePath) async {
-//   try {
-//     final GoogleSignInAccount? account = await googleSignIn.signIn();
-//     final authHeaders = await account!.authHeaders;
-//     final authenticateClient = google_auth.authenticatedClient(baseClient, credentials)
-//     final driveApi = drive.DriveApi(authenticateClient);
-
-//     final file = drive.File();
-//     file.name = 'backup.csv'; // Specify the desired file name
-
-//     final uploadMedia = drive.Media(
-//       http.StreamedMedia(
-//         http.ByteStream(file.openRead()),
-//         await file.length(),
-//         contentType: drive.FileImageMediaType,
-//       ),
-//     );
-
-//     final result = await driveApi.files.create(file, uploadMedia: uploadMedia);
-//     print('File uploaded successfully. File ID: ${result.id}');
-//   } catch (e) {
-//     print('Error uploading file to Google Drive: $e');
-//   }
-// }
 
 String ACCESS_TOKEN =
     '<YOUR_ACCESS_TOKEN>'; // Replace with the obtained access token
@@ -74,7 +48,27 @@ Future<void> backupFileToDrive() async {
     );
 
     if (response.statusCode == 200) {
-      print('--- File uploaded successfully.');
+      final responseBody = jsonDecode(response.body);
+      final fileId = responseBody['id'];
+
+      // Update the file metadata to set the desired filename
+      final updateUrl = 'https://www.googleapis.com/drive/v3/files/$fileId';
+      final updateHeaders = {
+        'Authorization': 'Bearer $ACCESS_TOKEN',
+        'Content-Type': 'application/json',
+      };
+      final updateBody = jsonEncode({'name': fileName});
+
+      final updateResponse = await http.patch(Uri.parse(updateUrl),
+          headers: updateHeaders, body: updateBody);
+
+      if (updateResponse.statusCode == 200) {
+        print(
+            '--- File uploaded successfully with the desired filename: $fileName');
+      } else {
+        print(
+            '--- Error updating file metadata. Status code: ${updateResponse.statusCode}');
+      }
     } else {
       print(
           '--- Error uploading file to Google Drive. Status code: ${response.statusCode}');

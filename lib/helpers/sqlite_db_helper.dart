@@ -110,7 +110,7 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
 // This function exports the records table to a CSV file and returns a boolean
 // value indicating success or failure.
 // It uses asynchronous programming to avoid blocking the UI thread.
-  Future<bool> exportTableToCSV() async {
+  Future<String> exportTableToCSV() async {
     final database = await openDatabase(databaseName);
     final tableData = await database.query(tableName);
 
@@ -137,24 +137,24 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
       if (kDebugMode) {
         print('External storage not available');
       }
-      return false;
+      return '';
     }
 
     final file = File('${directory.path}/table_data.csv');
     await file.writeAsString(csvString);
 
-    return true;
+    return file.path;
   }
 
   // Function to import "records" table data from a CSV file.
   // It uses asynchronous programming to avoid blocking the UI thread.
-  Future<ImportStatus> importTableFromCSV(ImportOption option) async {
+  Future<String> importTableFromCSV(ImportOption option) async {
     final directory = await getExternalStorageDirectory();
     if (directory == null) {
       if (kDebugMode) {
         print('External storage not available');
       }
-      return ImportStatus.fileNotFound;
+      return '';
     }
 
     // Set file path
@@ -170,7 +170,7 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
     final csvData = const CsvToListConverter().convert(csvString);
 
     if (csvData.length < 2) {
-      return ImportStatus.emptyTable;
+      return '';
     }
 
     // Get headers and rows from CSV data
@@ -214,7 +214,7 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
     await db.close();
 
     // Return true to indicate successful import
-    return ImportStatus.success;
+    return filePath;
   }
 
   // Function for debugging the import and export functions.
