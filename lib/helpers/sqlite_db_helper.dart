@@ -148,17 +148,18 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
 
   // Function to import "records" table data from a CSV file.
   // It uses asynchronous programming to avoid blocking the UI thread.
-  Future<String> importTableFromCSV(ImportOption option) async {
+  Future<ImportStatus> importTableFromCSV(ImportOption option,
+      {String? fileDownloadPath}) async {
     final directory = await getExternalStorageDirectory();
     if (directory == null) {
       if (kDebugMode) {
         print('External storage not available');
       }
-      return '';
+      return ImportStatus.fileNotFound;
     }
 
     // Set file path
-    final filePath = '${directory.path}/table_data.csv';
+    final filePath = fileDownloadPath ?? '${directory.path}/table_data.csv';
 
     // Create file object
     final file = File(filePath);
@@ -170,7 +171,7 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
     final csvData = const CsvToListConverter().convert(csvString);
 
     if (csvData.length < 2) {
-      return '';
+      return ImportStatus.emptyTable;
     }
 
     // Get headers and rows from CSV data
@@ -214,7 +215,7 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
     await db.close();
 
     // Return true to indicate successful import
-    return filePath;
+    return ImportStatus.success;
   }
 
   // Function for debugging the import and export functions.

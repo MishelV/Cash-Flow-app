@@ -4,96 +4,9 @@ import 'package:cash_flow_app/widgets/home_screen/currency_selection_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
 
-import 'dart:io';
-import 'dart:convert';
-
+import '../../helpers/google_drive_helper.dart';
 import '../../models/import_records_models.dart';
-
-final googleSignIn = GoogleSignIn(
-  scopes: [
-    'email',
-    'https://www.googleapis.com/auth/drive.file',
-  ],
-);
-
-String ACCESS_TOKEN =
-    '<YOUR_ACCESS_TOKEN>'; // Replace with the obtained access token
-String FILE_PATH =
-    '<YOUR_FILE_PATH>'; // Replace with the local path to the file
-const String fileName =
-    'CashFlowBackup.csv'; // Replace with the desired name for the file
-
-Future<void> backupFileToDrive() async {
-  try {
-    final file = File(FILE_PATH);
-    final fileContent = await file.readAsBytes();
-
-    final uploadUrl =
-        'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&name=${Uri.encodeQueryComponent(fileName)}';
-
-    final headers = {
-      'Authorization': 'Bearer $ACCESS_TOKEN',
-      'Content-Type': 'application/octet-stream',
-      'Content-Length': fileContent.length.toString(),
-    };
-
-    final request = Uri.parse(uploadUrl);
-    final response = await http.post(
-      request.replace(queryParameters: {'name': fileName}),
-      headers: headers,
-      body: fileContent,
-    );
-
-    if (response.statusCode == 200) {
-      final responseBody = jsonDecode(response.body);
-      final fileId = responseBody['id'];
-
-      // Update the file metadata to set the desired filename
-      final updateUrl = 'https://www.googleapis.com/drive/v3/files/$fileId';
-      final updateHeaders = {
-        'Authorization': 'Bearer $ACCESS_TOKEN',
-        'Content-Type': 'application/json',
-      };
-      final updateBody = jsonEncode({'name': fileName});
-
-      final updateResponse = await http.patch(Uri.parse(updateUrl),
-          headers: updateHeaders, body: updateBody);
-
-      if (updateResponse.statusCode == 200) {
-        print(
-            '--- File uploaded successfully with the desired filename: $fileName');
-      } else {
-        print(
-            '--- Error updating file metadata. Status code: ${updateResponse.statusCode}');
-      }
-    } else {
-      print(
-          '--- Error uploading file to Google Drive. Status code: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('--- Error uploading file to Google Drive: $e');
-  }
-}
-
-Future<String> authenticateWithGoogle() async {
-  try {
-    // Prompt the user to select a Google account
-    final GoogleSignInAccount? account = await googleSignIn.signIn();
-
-    // Retrieve the authentication token
-    final GoogleSignInAuthentication authentication =
-        await account!.authentication;
-    final String accessToken = authentication.accessToken ?? '';
-
-    return accessToken;
-  } catch (error) {
-    print('--- Google authentication error: $error');
-    return '';
-  }
-}
 
 class AppSideDrawer extends StatelessWidget {
   const AppSideDrawer({Key? key}) : super(key: key);
@@ -121,23 +34,6 @@ class AppSideDrawer extends StatelessWidget {
           const ImportButton(),
           const Divider(),
           const ExportButton(),
-          const Divider(),
-          ElevatedButton(
-            onPressed: () async {
-              authenticateWithGoogle().then((accessToken) {
-                if (accessToken.isNotEmpty) {
-                  // Access token obtained successfully, proceed with API calls
-                  // Save the access token securely or use it as needed
-                  ACCESS_TOKEN = accessToken;
-                  print('--- Access token: $accessToken');
-                } else {
-                  // Handle authentication error
-                  print('--- Authentication failed.');
-                }
-              });
-            },
-            child: const Text('Sync with Google Drive'),
-          ),
           const Expanded(
             child: SizedBox(
               height: 100,
@@ -204,10 +100,15 @@ class ExportButton extends StatelessWidget {
       onTap: () {
         SQFLiteDBHelper().exportTableToCSV().then((filePath) {
           if (filePath.isNotEmpty) {
-            FILE_PATH = filePath;
-            backupFileToDrive();
-            showInformationDialog(
-                context, "Records were exported successfully!");
+            backupFileToDrive(filePath).then((sucess) {
+              if (sucess) {
+                showInformationDialog(
+                    context, "Records were exported successfully!");
+              } else {
+                showErrorDialog(context,
+                    "An error has occurred while uploading the file to google drive. Please check your internet connection.");
+              }
+            });
           } else {
             showErrorDialog(context,
                 "An error has occurred while exporting the records to a file. Please try again or contact us if the error persists.");
