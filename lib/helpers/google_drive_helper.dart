@@ -1,4 +1,5 @@
 import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -26,11 +27,23 @@ Future<String> authenticateWithGoogle() async {
 
     return accessToken;
   } catch (error) {
-    print('--- Google authentication error: $error');
+    debugPrint('--- Google authentication error: $error');
     return '';
   }
 }
 
+/// Takes a file path as input and backs up the file to Google Drive.
+/// Authenticates with Google using the authenticateWithGoogle() function.
+/// If authentication is successful, it reads the file content and uploads it
+///  to Google Drive using the Google Drive API.
+/// It also updates the file metadata to set the desired filename.
+/// If any errors occur during the process, appropriate error messages are thrown.
+///
+/// @param filePath The path of the file to be backed up to Google Drive.
+///
+/// @throws Authentication failed if authentication with Google fails.
+/// @throws Error uploading file to Google Drive: {error message} if any error occurs during the process.
+/// @throws Error updating file metadata. Status code: {status code} if updating file metadata fails.
 Future<void> backupFileToDrive(String filePath) async {
   final accessToken = await authenticateWithGoogle();
   if (accessToken.isEmpty) {
@@ -84,6 +97,18 @@ Future<void> backupFileToDrive(String filePath) async {
   }
 }
 
+/// Downloads a file from Google Drive.
+///
+/// This function authenticates with Google and gets an access token.
+/// It then searches for the file by name,
+/// retrieves the file ID, and downloads the file content.
+/// The downloaded content is saved to a file and the file path is returned.
+///
+/// @return A Future object that resolves to a String representing the file path
+///  of the downloaded file.
+///
+/// @throws An error if authentication fails, the file is not found in
+///  Google Drive, or there is an error downloading the file.
 Future<String> downloadFileFromDrive() async {
   final accessToken = await authenticateWithGoogle();
   if (accessToken.isEmpty) {
