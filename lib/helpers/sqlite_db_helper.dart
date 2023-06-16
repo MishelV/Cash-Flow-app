@@ -107,6 +107,18 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
     );
   }
 
+  static Future<String> filePath() async {
+    final directory = await getExternalStorageDirectory();
+    if (directory == null) {
+      if (kDebugMode) {
+        print('External storage not available');
+      }
+      return '';
+    }
+
+    return '${directory.path}/table_data.csv';
+  }
+
 // This function exports the records table to a CSV file and returns a boolean
 // value indicating success or failure.
 // It uses asynchronous programming to avoid blocking the UI thread.
@@ -132,15 +144,8 @@ CREATE TABLE $tableName(id TEXT PRIMARY KEY, name TEXT, description TEXT, value 
 
     final csvString = const ListToCsvConverter().convert(csvData);
 
-    final directory = await getExternalStorageDirectory();
-    if (directory == null) {
-      if (kDebugMode) {
-        print('External storage not available');
-      }
-      return '';
-    }
-
-    final file = File('${directory.path}/table_data.csv');
+    final filePath = await SQFLiteDBHelper.filePath();
+    final file = File(filePath);
     await file.writeAsString(csvString);
 
     return file.path;

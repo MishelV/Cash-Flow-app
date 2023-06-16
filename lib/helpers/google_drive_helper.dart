@@ -1,3 +1,4 @@
+import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -6,23 +7,34 @@ import 'dart:convert';
 
 const String googleDriveFileName = 'CashFlowBackup.csv';
 
-final googleSignIn = GoogleSignIn(
-  scopes: [
-    'email',
-    'https://www.googleapis.com/auth/drive.file',
-  ],
-);
+Future<String> authenticateWithGoogle() async {
+  final googleSignIn = GoogleSignIn(
+    scopes: [
+      'email',
+      'https://www.googleapis.com/auth/drive.file',
+    ],
+  );
 
-Future<bool> backupFileToDrive(String filePath) async {
+  try {
+    // Prompt the user to select a Google account
+    final GoogleSignInAccount? account = await googleSignIn.signIn();
+
+    // Retrieve the authentication token
+    final GoogleSignInAuthentication authentication =
+        await account!.authentication;
+    final String accessToken = authentication.accessToken ?? '';
+
+    return accessToken;
+  } catch (error) {
+    print('--- Google authentication error: $error');
+    return '';
+  }
+}
+
+Future<void> backupFileToDrive(String filePath) async {
   final accessToken = await authenticateWithGoogle();
-  if (accessToken.isNotEmpty) {
-    // Access token obtained successfully, proceed with API calls
-    // Save the access token securely or use it as needed
-    print('--- Access token: $accessToken');
-  } else {
-    // Handle authentication error
-    print('--- Authentication failed.');
-    return false;
+  if (accessToken.isEmpty) {
+    throw "Authentication failed.";
   }
 
   try {
@@ -61,39 +73,67 @@ Future<bool> backupFileToDrive(String filePath) async {
       final updateResponse = await http.patch(Uri.parse(updateUrl),
           headers: updateHeaders, body: updateBody);
 
-      if (updateResponse.statusCode == 200) {
-        print(
-            '--- File uploaded successfully with the desired filename: $googleDriveFileName');
-        return true;
-      } else {
-        print(
-            '--- Error updating file metadata. Status code: ${updateResponse.statusCode}');
-        return false;
+      if (updateResponse.statusCode != 200) {
+        throw 'Error updating file metadata. Status code: ${updateResponse.statusCode}';
       }
     } else {
-      print(
-          '--- Error uploading file to Google Drive. Status code: ${response.statusCode}');
-      return false;
+      throw 'Error uploading file to Google Drive. Status code: ${response.statusCode}';
     }
   } catch (e) {
-    print('--- Error uploading file to Google Drive: $e');
-    return false;
+    throw 'Error uploading file to Google Drive: $e';
   }
 }
 
-Future<String> authenticateWithGoogle() async {
+Future<String> downloadFileFromDrive() async {
+  final accessToken = await authenticateWithGoogle();
+  if (accessToken.isEmpty) {
+    throw "Authentication failed.";
+  }
+
   try {
-    // Prompt the user to select a Google account
-    final GoogleSignInAccount? account = await googleSignIn.signIn();
+    // Search for the file by name
+    final searchUrl = 'https://www.googleapis.com/drive/v3/files?'
+        'q=name="${Uri.encodeQueryComponent(googleDriveFileName)}"';
+    final searchHeaders = {'Authorization': 'Bearer $accessToken'};
 
-    // Retrieve the authentication token
-    final GoogleSignInAuthentication authentication =
-        await account!.authentication;
-    final String accessToken = authentication.accessToken ?? '';
+    final searchResponse =
+        await http.get(Uri.parse(searchUrl), headers: searchHeaders);
 
-    return accessToken;
-  } catch (error) {
-    print('--- Google authentication error: $error');
-    return '';
+    if (searchResponse.statusCode == 200) {
+      final searchResults = searchResponse.body;
+      final searchResultsJson = jsonDecode(searchResults);
+
+      if (searchResultsJson['files'] != null &&
+          searchResultsJson['files'].isNotEmpty) {
+        // Get the file ID of the first matching file
+        final fileId = searchResultsJson['files'][0]['id'];
+
+        // Download the file content
+        final downloadUrl =
+            'https://www.googleapis.com/drive/v3/files/$fileId?alt=media';
+        final downloadHeaders = {'Authorization': 'Bearer $accessToken'};
+
+        final response =
+            await http.get(Uri.parse(downloadUrl), headers: downloadHeaders);
+
+        if (response.statusCode == 200) {
+          final filePath = await SQFLiteDBHelper.filePath();
+
+          // Save the downloaded content to a file
+          final file = File(filePath);
+          await file.writeAsBytes(response.bodyBytes);
+
+          return filePath;
+        } else {
+          throw 'Error downloading file from Google Drive. Status code: ${response.statusCode}';
+        }
+      } else {
+        throw 'File not found in Google Drive.';
+      }
+    } else {
+      throw 'Error searching for the file in Google Drive. Status code: ${searchResponse.statusCode}';
+    }
+  } catch (e) {
+    throw 'Error downloading file from Google Drive: $e';
   }
 }

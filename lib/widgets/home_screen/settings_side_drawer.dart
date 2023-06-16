@@ -69,24 +69,36 @@ class ImportButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: const Text('Import Records'),
-      onTap: () {
-        SQFLiteDBHelper()
-            .importTableFromCSV(ImportOption.overrideTable)
-            .then((result) {
-          if (result == ImportStatus.success) {
-            showInformationDialog(context,
-                "Records were imported successfully! Please restart the app for it to work properly.",
-                buttonText: "Let's restart the App!", onDismiss: () {
-              Restart.restartApp();
+        title: const Text('Import Records'),
+        onTap: () {
+          try {
+            downloadFileFromDrive().then((filePath) {
+              if (filePath.isNotEmpty) {
+                SQFLiteDBHelper()
+                    .importTableFromCSV(ImportOption.overrideTable,
+                        fileDownloadPath: filePath)
+                    .then((result) {
+                  if (result == ImportStatus.success) {
+                    showInformationDialog(
+                        context,
+                        "Records were imported successfully!"
+                        "Please restart the app for it to work properly.",
+                        buttonText: "Let's restart the App!", onDismiss: () {
+                      Restart.restartApp();
+                    });
+                  } else {
+                    showErrorDialog(
+                        context,
+                        "An error has occurred while importing the file."
+                        "Please try again or contact us if the error persists.");
+                  }
+                });
+              } else {}
             });
-          } else {
-            showErrorDialog(context,
-                "An error has occurred while importing the file. Please try again or contact us if the error persists.");
+          } catch (e) {
+            showErrorDialog(context, e.toString());
           }
         });
-      },
-    );
   }
 }
 
@@ -100,18 +112,19 @@ class ExportButton extends StatelessWidget {
       onTap: () {
         SQFLiteDBHelper().exportTableToCSV().then((filePath) {
           if (filePath.isNotEmpty) {
-            backupFileToDrive(filePath).then((sucess) {
-              if (sucess) {
+            try {
+              backupFileToDrive(filePath).then((sucess) {
                 showInformationDialog(
                     context, "Records were exported successfully!");
-              } else {
-                showErrorDialog(context,
-                    "An error has occurred while uploading the file to google drive. Please check your internet connection.");
-              }
-            });
+              });
+            } catch (e) {
+              showErrorDialog(context, e.toString());
+            }
           } else {
-            showErrorDialog(context,
-                "An error has occurred while exporting the records to a file. Please try again or contact us if the error persists.");
+            showErrorDialog(
+                context,
+                "An error has occurred while exporting the records to a file."
+                "Please try again or contact us if the error persists.");
           }
         });
       },
