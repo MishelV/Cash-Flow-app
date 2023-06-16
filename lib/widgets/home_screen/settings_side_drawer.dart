@@ -2,12 +2,14 @@ import 'package:cash_flow_app/helpers/sqlite_db_helper.dart';
 import 'package:cash_flow_app/widgets/general/information_dialog.dart';
 import 'package:cash_flow_app/widgets/home_screen/currency_selection_dialog.dart';
 import 'package:flutter/material.dart';
+// import 'package:googleapis/people/v1.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-// import 'dart:io';
-// import 'package:http/http.dart' as http;
+import 'dart:io';
+import 'package:http/http.dart' as http;
 // import 'package:googleapis/drive/v3.dart' as drive;
+// import "package:googleapis_auth/auth_io.dart" as google_auth;
 
 import '../../models/import_records_models.dart';
 
@@ -22,7 +24,7 @@ final googleSignIn = GoogleSignIn(
 //   try {
 //     final GoogleSignInAccount? account = await googleSignIn.signIn();
 //     final authHeaders = await account!.authHeaders;
-//     final authenticateClient = GoogleAuthClient(authHeaders);
+//     final authenticateClient = google_auth.authenticatedClient(baseClient, credentials)
 //     final driveApi = drive.DriveApi(authenticateClient);
 
 //     final file = drive.File();
@@ -43,40 +45,44 @@ final googleSignIn = GoogleSignIn(
 //   }
 // }
 
-// final String accessToken =
-//     '<YOUR_ACCESS_TOKEN>'; // Replace with the obtained access token
-// final String filePath =
-//     '<YOUR_FILE_PATH>'; // Replace with the local path to the file
-// final String fileName =
-//     '<YOUR_FILE_NAME>'; // Replace with the desired name for the file
+String ACCESS_TOKEN =
+    '<YOUR_ACCESS_TOKEN>'; // Replace with the obtained access token
+String FILE_PATH =
+    '<YOUR_FILE_PATH>'; // Replace with the local path to the file
+const String fileName =
+    'CashFlowBackup.csv'; // Replace with the desired name for the file
 
-// Future<void> backupFileToDrive() async {
-//   try {
-//     final file = File(filePath);
-//     final fileContent = await file.readAsBytes();
+Future<void> backupFileToDrive() async {
+  try {
+    final file = File(FILE_PATH);
+    final fileContent = await file.readAsBytes();
 
-//     const uploadUrl =
-//         'https://www.googleapis.com/upload/drive/v3/files?uploadType=media';
-//     final headers = {
-//       'Authorization': 'Bearer $accessToken',
-//       'Content-Type': 'application/octet-stream',
-//       'Content-Length': fileContent.length.toString(),
-//       'Content-Disposition': 'attachment; filename="$fileName"',
-//     };
+    final uploadUrl =
+        'https://www.googleapis.com/upload/drive/v3/files?uploadType=media&name=${Uri.encodeQueryComponent(fileName)}';
 
-//     final response =
-//         await http.post(uploadUrl as Uri, headers: headers, body: fileContent);
+    final headers = {
+      'Authorization': 'Bearer $ACCESS_TOKEN',
+      'Content-Type': 'application/octet-stream',
+      'Content-Length': fileContent.length.toString(),
+    };
 
-//     if (response.statusCode == 200) {
-//       print('File uploaded successfully.');
-//     } else {
-//       print(
-//           'Error uploading file to Google Drive. Status code: ${response.statusCode}');
-//     }
-//   } catch (e) {
-//     print('Error uploading file to Google Drive: $e');
-//   }
-// }
+    final request = Uri.parse(uploadUrl);
+    final response = await http.post(
+      request.replace(queryParameters: {'name': fileName}),
+      headers: headers,
+      body: fileContent,
+    );
+
+    if (response.statusCode == 200) {
+      print('--- File uploaded successfully.');
+    } else {
+      print(
+          '--- Error uploading file to Google Drive. Status code: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('--- Error uploading file to Google Drive: $e');
+  }
+}
 
 Future<String> authenticateWithGoogle() async {
   try {
@@ -90,7 +96,7 @@ Future<String> authenticateWithGoogle() async {
 
     return accessToken;
   } catch (error) {
-    print('Google authentication error: $error');
+    print('--- Google authentication error: $error');
     return '';
   }
 }
@@ -128,14 +134,15 @@ class AppSideDrawer extends StatelessWidget {
                 if (accessToken.isNotEmpty) {
                   // Access token obtained successfully, proceed with API calls
                   // Save the access token securely or use it as needed
-                  print('Access token: $accessToken');
+                  ACCESS_TOKEN = accessToken;
+                  print('--- Access token: $accessToken');
                 } else {
                   // Handle authentication error
-                  print('Authentication failed.');
+                  print('--- Authentication failed.');
                 }
               });
             },
-            child: Text('Sync with Google Drive'),
+            child: const Text('Sync with Google Drive'),
           ),
           const Expanded(
             child: SizedBox(
@@ -201,8 +208,10 @@ class ExportButton extends StatelessWidget {
     return ListTile(
       title: const Text('Export Records'),
       onTap: () {
-        SQFLiteDBHelper().exportTableToCSV().then((success) {
-          if (success) {
+        SQFLiteDBHelper().exportTableToCSV().then((filePath) {
+          if (filePath.isNotEmpty) {
+            FILE_PATH = filePath;
+            backupFileToDrive();
             showInformationDialog(
                 context, "Records were exported successfully!");
           } else {
