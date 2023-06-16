@@ -118,40 +118,9 @@ class AppSideDrawer extends StatelessWidget {
             },
           ),
           const Divider(),
-          ListTile(
-            title: const Text('Import Records'),
-            onTap: () {
-              SQFLiteDBHelper()
-                  .importTableFromCSV(ImportOption.overrideTable)
-                  .then((result) {
-                if (result == ImportStatus.success) {
-                  showInformationDialog(context,
-                      "Records were imported successfully! Please restart the app for it to work properly.",
-                      buttonText: "Let's restart the App!", onDismiss: () {
-                    Restart.restartApp();
-                  });
-                } else {
-                  showErrorDialog(context,
-                      "An error has occurred while importing the file. Please try again or contact us if the error persists.");
-                }
-              });
-            },
-          ),
+          const ImportButton(),
           const Divider(),
-          ListTile(
-            title: const Text('Export Records'),
-            onTap: () {
-              SQFLiteDBHelper().exportTableToCSV().then((success) {
-                if (success) {
-                  showInformationDialog(
-                      context, "Records were exported successfully!");
-                } else {
-                  showErrorDialog(context,
-                      "An error has occurred while exporting the records to a file. Please try again or contact us if the error persists.");
-                }
-              });
-            },
-          ),
+          const ExportButton(),
           const Divider(),
           ElevatedButton(
             onPressed: () async {
@@ -166,7 +135,7 @@ class AppSideDrawer extends StatelessWidget {
                 }
               });
             },
-            child: Text('Sign in with Google'),
+            child: Text('Sync with Google Drive'),
           ),
           const Expanded(
             child: SizedBox(
@@ -193,6 +162,55 @@ class AppSideDrawer extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ImportButton extends StatelessWidget {
+  const ImportButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: const Text('Import Records'),
+      onTap: () {
+        SQFLiteDBHelper()
+            .importTableFromCSV(ImportOption.overrideTable)
+            .then((result) {
+          if (result == ImportStatus.success) {
+            showInformationDialog(context,
+                "Records were imported successfully! Please restart the app for it to work properly.",
+                buttonText: "Let's restart the App!", onDismiss: () {
+              Restart.restartApp();
+            });
+          } else {
+            showErrorDialog(context,
+                "An error has occurred while importing the file. Please try again or contact us if the error persists.");
+          }
+        });
+      },
+    );
+  }
+}
+
+class ExportButton extends StatelessWidget {
+  const ExportButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: const Text('Export Records'),
+      onTap: () {
+        SQFLiteDBHelper().exportTableToCSV().then((success) {
+          if (success) {
+            showInformationDialog(
+                context, "Records were exported successfully!");
+          } else {
+            showErrorDialog(context,
+                "An error has occurred while exporting the records to a file. Please try again or contact us if the error persists.");
+          }
+        });
+      },
     );
   }
 }
